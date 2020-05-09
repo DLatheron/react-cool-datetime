@@ -7,7 +7,8 @@ npm install react-cool-datetime
 ```
 
 ## TODO
-- Basic implementation
+- Implement the date picker dropdown using a full CSS grid;
 
 
 ### Done
+- ~~Basic implementation~~

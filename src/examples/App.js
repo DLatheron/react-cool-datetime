@@ -12,7 +12,7 @@ const examples = {
     basic: {
         title: 'Basic Example',
         props: {
-            open: false,
+            open: true,
 
         }
     }

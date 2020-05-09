@@ -4,9 +4,10 @@ import classNames from 'classnames';
 import { useOutsideClick } from '../Hooks';
 
 import InputContainer from './Input/InputContainer';
+import PickerContainer from './Picker/PickerContainer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretUp, faCaretDown, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCaretUp, faCaretDown, faTimes, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 import './DateTime.scss';
 
@@ -63,13 +64,23 @@ DateTime.propTypes = {
     suffix: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
+    ]),
+    clear: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.func
+    ]),
+    handle: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.func
     ])
 };
 
 DateTime.defaultProps = {
     open: false,
     prefix: undefined,
-    suffix: undefined
+    suffix: undefined,
+    clear: <FontAwesomeIcon icon={faTimes} />,
+    handle: <FontAwesomeIcon icon={faCalendar} />,
 };
 
 export default function DateTime(props) {
@@ -139,6 +150,7 @@ export default function DateTime(props) {
             }
         >
             <InputContainer {...renderProps} />
+            <PickerContainer {...renderProps} />
         </div>
     )
 }

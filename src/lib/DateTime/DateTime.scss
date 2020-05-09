@@ -70,4 +70,179 @@
             }
         }
     }
+
+    >.picker-container {
+        position: relative;
+
+        >.picker {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            width: calc(100% - 2px);
+            border: 1px solid red;
+            background-color: white;
+
+            &.open {
+                display: block;
+            }
+
+            &.closed {
+                display: none;
+            }
+
+            button {
+                outline: none;
+                background: none;
+                border: none;
+            }
+
+            >.body {
+                background-color: beige;
+
+                >.year-section {
+                    display: grid;
+                    grid-template-columns: auto 1fr auto;
+                    grid-template-areas: 'prev year next';
+
+                    border-bottom: 1px solid black;
+
+                    button {
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: lightgray;
+                        }
+                    }
+
+                    >.year-button {
+                        font-size: 20px;
+                        width: 40px;
+                        height: 100%;
+                    }
+
+                    >.prev-year-button {
+                        grid-area: prev;
+                        margin: auto;
+                    }
+
+                    >.year {
+                        grid-area: year;
+                        margin: auto;
+                        font-size: 22px;
+                        font-weight: 900;
+                        padding: 10px 0;
+                    }
+
+                    >.next-year-button {
+                        grid-area: next;
+                        margin: auto;
+                    }
+                }
+
+                >.month-section {
+                    display: grid;
+                    grid-template-columns: auto 1fr auto;
+                    grid-template-areas: 'prev month next';
+
+                    border-bottom: 1px solid black;
+
+                    button {
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: lightgray;
+                        }
+                    }
+
+                    >.month-button {
+                        font-size: 18px;
+                        width: 40px;
+                        height: 100%;
+                    }
+
+                    >.prev-month-button {
+                        grid-area: prev;
+                        margin: auto;
+                    }
+
+                    >.month {
+                        grid-area: month;
+                        margin: auto;
+                        font-size: 18px;
+                        font-weight: 600;
+                        padding: 6px 0;
+                    }
+
+                    >.next-month-button {
+                        grid-area: next;
+                        margin: auto;
+                    }
+                }
+
+                >.day-of-month-section {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+                    grid-template-rows: auto auto auto auto auto auto auto;
+                    align-items: center;
+                    align-self: center;
+                    font-size: 14px;
+
+                    >.header {
+                        display: contents;
+                        grid-row: 0;
+
+                        >.day-of-week {
+                            text-align: center;
+                            vertical-align: middle;;
+                            padding: 10px 0;
+                            font-weight: 600;
+                        }
+
+                        >.day-of-week {
+                            border-left: 1px solid black;
+
+                            &:first-child{
+                                border-left: none;
+                            }
+                        }
+                    }
+
+                    >.week {
+                        display: contents;
+
+                        >.day-of-month  {
+                            font-size: 12px;
+                            text-align: center;
+                            vertical-align: middle;;
+                            padding: 10px 0;
+
+                            cursor: pointer;
+
+                            &:hover {
+                                background-color: lightgray;
+                                color: black;
+                            }
+                        }
+
+                        >.day-of-month {
+                            border-top: 1px solid black;
+                            border-left: 1px solid black;
+
+                            &:first-child{
+                                border-left: none;
+                            }
+                        }
+
+                        >.curr-month {
+                        }
+
+                        >.next-month,
+                        >.prev-month {
+                            color: lightgray;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
