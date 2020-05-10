@@ -29,9 +29,10 @@
                 outline: none;
                 border: none;
                 font-size: 12px;
-                width: auto;
+                width: fit-content;
                 height: calc(100% - 2px);
                 background-color: beige;
+                text-align: center;
 
                 ::placeholder {
                     color: white;
