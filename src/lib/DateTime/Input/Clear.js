@@ -20,7 +20,7 @@ export default function Clear(renderProps) {
             )}
             onClick={event => {
                 methods.suppressEvent(event);
-                methods.clearInputValue();
+                methods.clearDate();
             }}
             disabled={props.disabled}
 

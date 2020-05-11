@@ -1,13 +1,114 @@
 import React from 'react';
 import classNames from 'classnames';
+import { DateHelper } from '../Helpers/DateHelper';
+import moment from 'moment';
+import range from 'lodash/range';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretRight, faCaretLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
+
+// TODO: Remove need for moment in here... by encapsulation...
+
+export function DayOfMonthPicker({
+    startOfMonthWeek,
+    startOfMonth,
+    endOfMonth,
+    numWeeks
+}) {
+    return (
+        <div className='day-of-month-section'>
+            <div className='header'>
+                <div className='day-of-week'>Sun</div>
+                <div className='day-of-week'>Mon</div>
+                <div className='day-of-week'>Tue</div>
+                <div className='day-of-week'>Wed</div>
+                <div className='day-of-week'>Thu</div>
+                <div className='day-of-week'>Fri</div>
+                <div className='day-of-week'>Sat</div>
+            </div>
+            {
+                range(0, numWeeks).map(week =>
+                    <DayOfWeekPicker
+                        key={week}
+                        startOfWeek={startOfMonthWeek}
+                        startOfMonth={startOfMonth}
+                        endOfMonth={endOfMonth}
+                        week={week}
+                    />
+                )
+            }
+        </div>
+    );
+}
+
+
+export function DayOfWeekPicker({
+    startOfWeek,
+    startOfMonth,
+    endOfMonth,
+    week = 0
+}) {
+    console.info('RenderWeek', startOfWeek, startOfMonth, endOfMonth);
+
+    const startOfWeekMoment = DateHelper.myDateToMoment(startOfWeek);
+    const startOfMonthMoment = DateHelper.myDateToMoment(startOfMonth);
+    const endOfMonthMoment = DateHelper.myDateToMoment(endOfMonth);
+
+    startOfWeekMoment.add(week, 'weeks');
+
+    const addClasses = dayMoment => {
+        if (dayMoment.isBefore(startOfMonthMoment)) {
+            return 'prev-month';
+        } else if (dayMoment.isAfter(endOfMonthMoment)) {
+            return 'next-month'
+        }
+        return 'curr-month';
+    }
+
+    return (
+        <div className='week'>
+            {
+                [0, 1, 2, 3, 4, 5, 6]
+                    .map(dayOffset => {
+                        const dayMoment = moment(startOfWeekMoment).add(dayOffset, 'days');
+                        const label = dayMoment.format('DD-MMM-YYYY');
+
+                        return (
+                            <div
+                                key={label}
+                                data-id={label}
+                                className={`day-of-month ${addClasses(dayMoment)}`}
+                                aria-label={label}
+                            >
+                                {dayMoment.format('D')}
+                            </div>
+                        );
+                    })
+            }
+        </div>
+    );
+}
+
 
 export default function PickerContainer(renderProps) {
     const {
+        methods,
         state
     } = renderProps;
+
+    const date = state.date
+        ? state.date
+        : DateHelper.defaultDate();
+        console.info('date', date);
+
+    const startOfMonth = DateHelper.startOfMonth(date);
+    const startOfMonthWeek = DateHelper.startOfMonthWeek(startOfMonth);
+    const endOfMonth = DateHelper.endOfMonth(startOfMonth);
+    const weeksToDisplayMonth = DateHelper.weeksToDisplayMonth(startOfMonthWeek, endOfMonth);
+
+    console.info('startOfMonth', startOfMonth);
+    console.info('startOfMonthWeek', startOfMonthWeek);
+    console.info('weeksToDisplayMonth', weeksToDisplayMonth);
 
     return (
         <div className='picker-container'>
@@ -21,81 +122,43 @@ export default function PickerContainer(renderProps) {
             >
                 <div className='body'>
                     <div className='year-section'>
-                        <button className='year-button prev-year-button'>
+                        <button
+                            className='year-button prev-year-button'
+                            onClick={() => methods.setDate(DateHelper.prevYear(date))}
+                        >
                             <FontAwesomeIcon icon={faCaretLeft} />
                         </button>
-                        <span className='year'>2020</span>
-                        <button className='year-button next-year-button'>
+                        <span className='year'>{date.year}</span>
+                        <button
+                            className='year-button next-year-button'
+                            onClick={() => methods.setDate(DateHelper.nextYear(date))}
+                        >
                             <FontAwesomeIcon icon={faCaretRight} />
                         </button>
                     </div>
 
                     <div className='month-section'>
-                        <button className='month-button prev-month-button'>
+                        <button
+                            className='month-button prev-month-button'
+                            onClick={() => methods.setDate(DateHelper.prevMonth(date))}
+                        >
                             <FontAwesomeIcon icon={faCaretLeft} />
                         </button>
-                        <span className='month'>April</span>
-                        <button className='month-button next-month-button'>
+                        <span className='month'>{DateHelper.getLongMonth(date)}</span>
+                        <button
+                            className='month-button next-month-button'
+                            onClick={() => methods.setDate(DateHelper.nextMonth(date))}
+                        >
                             <FontAwesomeIcon icon={faCaretRight} />
                         </button>
                     </div>
 
-                    <div className='day-of-month-section'>
-                        <div className='header'>
-                            <div className='day-of-week'>Sun</div>
-                            <div className='day-of-week'>Mon</div>
-                            <div className='day-of-week'>Tue</div>
-                            <div className='day-of-week'>Wed</div>
-                            <div className='day-of-week'>Thu</div>
-                            <div className='day-of-week'>Fri</div>
-                            <div className='day-of-week'>Sat</div>
-                        </div>
-                        <div className='week'>
-                            <div className='day-of-month prev-month'>30</div>
-                            <div className='day-of-month prev-month'>31</div>
-                            <div className='day-of-month curr-month'>1</div>
-                            <div className='day-of-month curr-month'>2</div>
-                            <div className='day-of-month curr-month'>3</div>
-                            <div className='day-of-month curr-month'>4</div>
-                            <div className='day-of-month curr-month'>5</div>
-                        </div>
-                        <div className='week'>
-                            <div className='day-of-month curr-month'>6</div>
-                            <div className='day-of-month curr-month'>7</div>
-                            <div className='day-of-month curr-month'>8</div>
-                            <div className='day-of-month curr-month'>9</div>
-                            <div className='day-of-month curr-month'>10</div>
-                            <div className='day-of-month curr-month'>11</div>
-                            <div className='day-of-month curr-month'>12</div>
-                        </div>
-                        <div className='week'>
-                            <div className='day-of-month curr-month'>13</div>
-                            <div className='day-of-month curr-month'>14</div>
-                            <div className='day-of-month curr-month'>15</div>
-                            <div className='day-of-month curr-month'>16</div>
-                            <div className='day-of-month curr-month'>17</div>
-                            <div className='day-of-month curr-month'>18</div>
-                            <div className='day-of-month curr-month'>19</div>
-                        </div>
-                        <div className='week'>
-                            <div className='day-of-month curr-month'>20</div>
-                            <div className='day-of-month curr-month'>21</div>
-                            <div className='day-of-month curr-month'>22</div>
-                            <div className='day-of-month curr-month'>23</div>
-                            <div className='day-of-month curr-month'>24</div>
-                            <div className='day-of-month curr-month'>25</div>
-                            <div className='day-of-month curr-month'>26</div>
-                        </div>
-                        <div className='week'>
-                            <div className='day-of-month curr-month'>27</div>
-                            <div className='day-of-month curr-month'>28</div>
-                            <div className='day-of-month curr-month'>29</div>
-                            <div className='day-of-month curr-month'>30</div>
-                            <div className='day-of-month curr-month'>31</div>
-                            <div className='day-of-month next-month'>1</div>
-                            <div className='day-of-month next-month'>2</div>
-                        </div>
-                    </div>
+                    <DayOfMonthPicker
+                        startOfMonthWeek={startOfMonthWeek}
+                        startOfMonth={startOfMonth}
+                        endOfMonth={endOfMonth}
+                        numWeeks={weeksToDisplayMonth}
+                    />
                 </div>
             </div>
         </div>

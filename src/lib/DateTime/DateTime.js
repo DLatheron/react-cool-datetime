@@ -5,16 +5,17 @@ import { useOutsideClick } from '../Hooks';
 
 import InputContainer from './Input/InputContainer';
 import PickerContainer from './Picker/PickerContainer';
+import { DateHelper } from './Helpers/DateHelper';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretUp, faCaretDown, faTimes, faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 import './DateTime.scss';
 
 function initialState({ open }) {
     return {
         open,
-        inputValue: ''
+        date: null
     };
 }
 
@@ -38,16 +39,16 @@ function reducer(state, action) {
                 open: !state.open
             };
 
-        case 'clearInputValue':
+        case 'clearDate':
             return {
                 ...state,
-                inputValue: ''
+                date: null
             };
 
-        case 'setInputValue':
+        case 'setDate':
             return {
                 ...state,
-                inputValue: action.inputValue
+                date: action.date
             };
 
         default:
@@ -90,7 +91,12 @@ export default function DateTime(props) {
     const [state, dispatch] = useReducer(
         reducer,
         initialState({
-            open: props.open
+            open: props.open,
+            date: {
+                year: 2020,
+                month: 5,
+                dayOfMonth: 11
+            }
         })
     );
 
@@ -109,11 +115,15 @@ export default function DateTime(props) {
             event.stopPropagation();
             event.nativeEvent.stopImmediatePropagation();
         },
-        clearInputValue: () => {
-            dispatch({ type: 'clearInputValue' });
+        clearDate: () => {
+            dispatch({ type: 'clearDate' });
         },
-        setInputValue: inputValue => {
-            dispatch({ type: 'setInputValue', inputValue });
+        setDate: date => {
+            // Only ever update the date if it is valid!
+            if (DateHelper.isValid(date)) {
+                console.info('Updaing control date to', date);
+                dispatch({ type: 'setDate', date });
+            }
         }
     };
 

@@ -14,7 +14,7 @@ export const InputTypes = {
         max: 31,
         maxLength: 2,
         pattern: /[0]{1}[1-9]{1}|[12]{1}[012]{1}|[3]{1}[01]{1}/,
-        formatValue: (inputType, value) => value.toString().padStart(inputType.maxLength, '0')
+        formatValue: (inputType, value) => value && value.toString().padStart(inputType.maxLength, '0')
     },
 
     M: {
@@ -30,7 +30,7 @@ export const InputTypes = {
         max: 12,
         maxLength: 2,
         pattern: /[0]{1}[1-9]{1}|[1]{1}[012]{1}/,
-        formatValue: (inputType, value) => value.toString().padStart(inputType.maxLength, '0')
+        formatValue: (inputType, value) => value && value.toString().padStart(inputType.maxLength, '0')
     },
     MMM: {
         type: 'text',
@@ -59,12 +59,13 @@ export const InputTypes = {
 export default function ParsedInput(renderProps) {
     const { methods, props } = renderProps;
 
-    const inputTypes = InputTypes[renderProps.type];
+    const inputType = InputTypes[renderProps.type];
 
+    console.info('renderProps.value', renderProps.value);
     const [value, setValue] = useState(
-        inputTypes.formatValue
-            ? inputTypes.formatValue(inputTypes, renderProps.value)
-            : renderProps.value
+        inputType.formatValue
+            ? inputType.formatValue(inputType, renderProps.value)
+            : renderProps.value || ''
     );
 
     return (
@@ -78,16 +79,16 @@ export default function ParsedInput(renderProps) {
             // maxLength={inputTypes.maxLength.toString()}
             // pattern={inputTypes.pattern}
             style={{
-                width: `${inputTypes.maxLength + 1}ch`
+                width: `${inputType.maxLength + 1}ch`
             }}
             value={value}
             onChange={event => {
                 const value = event.target.value;
                 const intValue = parseInt(value);
 
-                const lengthOk = inputTypes.maxLength === undefined || value.length <= inputTypes.maxLength;
-                const minOk = inputTypes.min === undefined || intValue >= inputTypes.min;
-                const maxOk = inputTypes.max === undefined || intValue <= inputTypes.max;
+                const lengthOk = inputType.maxLength === undefined || value.length <= inputType.maxLength;
+                const minOk = inputType.min === undefined || intValue >= inputType.min;
+                const maxOk = inputType.max === undefined || intValue <= inputType.max;
 
                 if (lengthOk) {
                     setValue(value);
@@ -112,29 +113,51 @@ export default function ParsedInput(renderProps) {
             }}
             placeholder={renderProps.type}
             disabled={props.disabled}
-            onBlur={event => {
-                const intValue = parseInt(value);
+            onBlur={() => {
+                // Format on loss of input focus.
+                setValue(
+                    inputType.formatValue
+                        ? inputType.formatValue(inputType, value)
+                        : value
+                );
 
-                const lengthOk = inputTypes.maxLength === undefined || value.length <= inputTypes.maxLength;
-                const minOk = inputTypes.min === undefined || intValue >= inputTypes.min;
-                const maxOk = inputTypes.max === undefined || intValue <= inputTypes.max;
+                // const intValue = parseInt(value);
 
-                if (!lengthOk || !minOk || !maxOk) {
-                    setValue(
-                        inputTypes.formatValue
-                            ? inputTypes.formatValue(inputTypes, renderProps.value)
-                            : renderProps.value
-                    );
-                } else {
-                    const newValue = inputTypes.formatValue
-                        ? inputTypes.formatValue(inputTypes, value)
-                        : renderProps.value;
+                // const lengthOk = inputType.maxLength === undefined || value.length <= inputType.maxLength;
+                // const minOk = inputType.min === undefined || intValue >= inputType.min;
+                // const maxOk = inputType.max === undefined || intValue <= inputType.max;
 
-                    setValue(newValue);
-                    renderProps.onChange(newValue);
-                }
+                // if (!lengthOk || !minOk || !maxOk) {
+                //     setValue(
+                //         inputType.formatValue
+                //             ? inputType.formatValue(inputType, renderProps.value)
+                //             : renderProps.value
+                //     );
+                // } else {
+                //     const newValue = inputType.formatValue
+                //         ? inputType.formatValue(inputType, value)
+                //         : value;
 
-                methods.suppressEvent(event);
+                //     console.info('Leaving', newValue);
+
+                //     if (renderProps.onChange(newValue)) {
+                //         setValue(
+                //             inputType.formatValue
+                //                 ? inputType.formatValue(inputType, newValue)
+                //                 : newValue
+                //         );
+                //     } else {
+                //         setValue(
+                //             inputType.formatValue
+                //                 ? inputType.formatValue(inputType, renderProps.value)
+                //                 : renderProps.value
+                //         );
+
+                //         console.info('Reverting to', renderProps.value);
+                //     }
+                // }
+
+                // methods.suppressEvent(event);
 
                 // const formattedValue = inputTypes.formatValue && inputTypes.formatValue(renderProps.value, renderProps.onChange);
                 // if (formattedValue) {
