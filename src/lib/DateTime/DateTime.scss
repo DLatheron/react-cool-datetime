@@ -257,6 +257,10 @@
                         }
 
                         >.curr-month {
+                            &.curr-date {
+                                background-color: blue;
+                                color: white;
+                            }
                         }
 
                         >.next-month,

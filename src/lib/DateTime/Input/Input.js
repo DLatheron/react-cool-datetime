@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
 import ParsedInput from '../ParsedInput/ParsedInput';
-import { DateHelper } from '../Helpers/DateHelper';
 
 export default function Input(renderProps) {
     const {

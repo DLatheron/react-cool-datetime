@@ -89,5 +89,14 @@ export const DateHelper = {
         const moment = DateHelper.myDateToMoment(date).add(1, 'year');
 
         return DateHelper.momentToMyDate(moment);
+    },
+
+    equals: (a, b) => {
+        console.info(a, b);
+        return (
+            a.dayOfMonth === b.dayOfMonth &&
+            a.month === b.month &&
+            a.year === b.year
+        );
     }
 };

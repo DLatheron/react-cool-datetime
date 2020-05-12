@@ -57,11 +57,10 @@ export const InputTypes = {
 // - If the month has been set then we should affect the max day-of-month available (same with year) - otherwise limit to 31.
 
 export default function ParsedInput(renderProps) {
-    const { methods, props } = renderProps;
+    const { props } = renderProps;
 
     const inputType = InputTypes[renderProps.type];
 
-    console.info('renderProps.value', renderProps.value);
     const [value, setValue] = useState(
         inputType.formatValue
             ? inputType.formatValue(inputType, renderProps.value)
@@ -95,7 +94,7 @@ export default function ParsedInput(renderProps) {
                 }
 
                 if (lengthOk && minOk && maxOk) {
-                    renderProps.onChange(value);
+                    renderProps.onChange(intValue);
                 }
 
                 // if (value.match(inputTypes.pattern)) {
