@@ -13,8 +13,8 @@ export default function PickerContainer(renderProps) {
         state
     } = renderProps;
 
-    const date = state.date
-        ? state.date
+    const date = state.pickerDate
+        ? state.pickerDate
         : DateHelper.defaultDate();
 
     const startOfMonth = DateHelper.startOfMonth(date);
@@ -36,14 +36,14 @@ export default function PickerContainer(renderProps) {
                     <div className='year-section'>
                         <button
                             className='year-button prev-year-button'
-                            onClick={() => methods.setDate(DateHelper.prevYear(date))}
+                            onClick={() => methods.setPickerDate(DateHelper.prevYear(date))}
                         >
                             <FontAwesomeIcon icon={faCaretLeft} />
                         </button>
                         <span className='year'>{date.year}</span>
                         <button
                             className='year-button next-year-button'
-                            onClick={() => methods.setDate(DateHelper.nextYear(date))}
+                            onClick={() => methods.setPickerDate(DateHelper.nextYear(date))}
                         >
                             <FontAwesomeIcon icon={faCaretRight} />
                         </button>
@@ -52,14 +52,14 @@ export default function PickerContainer(renderProps) {
                     <div className='month-section'>
                         <button
                             className='month-button prev-month-button'
-                            onClick={() => methods.setDate(DateHelper.prevMonth(date))}
+                            onClick={() => methods.setPickerDate(DateHelper.prevMonth(date))}
                         >
                             <FontAwesomeIcon icon={faCaretLeft} />
                         </button>
                         <span className='month'>{DateHelper.getLongMonth(date)}</span>
                         <button
                             className='month-button next-month-button'
-                            onClick={() => methods.setDate(DateHelper.nextMonth(date))}
+                            onClick={() => methods.setPickerDate(DateHelper.nextMonth(date))}
                         >
                             <FontAwesomeIcon icon={faCaretRight} />
                         </button>

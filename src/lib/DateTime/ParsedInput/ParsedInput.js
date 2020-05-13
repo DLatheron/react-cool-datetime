@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const InputTypes = {
     D: {
@@ -66,6 +66,13 @@ export default function ParsedInput(renderProps) {
             ? inputType.formatValue(inputType, renderProps.value)
             : renderProps.value || ''
     );
+
+    useEffect(() => {
+        setValue(inputType.formatValue
+            ? inputType.formatValue(inputType, renderProps.value)
+            : renderProps.value || ''
+        );
+    }, [inputType, renderProps.value]);
 
     return (
         <input

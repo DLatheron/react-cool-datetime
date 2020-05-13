@@ -92,7 +92,6 @@ export const DateHelper = {
     },
 
     equals: (a, b) => {
-        console.info(a, b);
         return (
             a.dayOfMonth === b.dayOfMonth &&
             a.month === b.month &&

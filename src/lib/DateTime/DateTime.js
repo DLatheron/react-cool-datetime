@@ -12,10 +12,11 @@ import { faTimes, faCalendar } from '@fortawesome/free-solid-svg-icons'
 
 import './DateTime.scss';
 
-function initialState({ open }) {
+function initialState(defaults) {
     return {
-        open,
-        date: null
+        open: defaults.open,
+        pickerDate: defaults.pickerDatenull,
+        selectedDate: defaults.selectedDate
     };
 }
 
@@ -39,16 +40,29 @@ function reducer(state, action) {
                 open: !state.open
             };
 
-        case 'clearDate':
+        case 'clearPickerDate':
             return {
                 ...state,
-                date: null
+                pickerDate: null
             };
 
-        case 'setDate':
+        case 'clearSelectedDate':
             return {
                 ...state,
-                date: action.date
+                selectedDate: null
+            };
+
+        case 'setPickerDate':
+            return {
+                ...state,
+                pickerDate: action.pickerDate
+            };
+
+        case 'setSelectedDate':
+            return {
+                ...state,
+                selectedDate: action.selectedDate,
+                pickerDate: action.selectedDate
             };
 
         default:
@@ -92,10 +106,15 @@ export default function DateTime(props) {
         reducer,
         initialState({
             open: props.open,
-            date: {
+            pickerDate: {
                 year: 2020,
                 month: 5,
-                dayOfMonth: 11
+                dayOfMonth: 1
+            },
+            selectedDate: {
+                year: 2020,
+                month: 5,
+                dayOfMonth: 13
             }
         })
     );
@@ -115,14 +134,24 @@ export default function DateTime(props) {
             event.stopPropagation();
             event.nativeEvent.stopImmediatePropagation();
         },
-        clearDate: () => {
-            dispatch({ type: 'clearDate' });
+        clearSelectedDate: () => {
+            dispatch({ type: 'clearSelectedDate' });
         },
-        setDate: date => {
+        clearPickerDate: () => {
+            dispatch({ type: 'clearPickerDate' });
+        },
+        setSelectedDate: selectedDate => {
             // Only ever update the date if it is valid!
-            if (DateHelper.isValid(date)) {
-                console.info('Updaing control date to', date);
-                dispatch({ type: 'setDate', date });
+            if (DateHelper.isValid(selectedDate)) {
+                console.info('Updaing selected date to', selectedDate);
+                dispatch({ type: 'setSelectedDate', selectedDate });
+            }
+        },
+        setPickerDate: pickerDate => {
+            // Only ever update the date if it is valid!
+            if (DateHelper.isValid(pickerDate)) {
+                console.info('Updaing picker date to', pickerDate);
+                dispatch({ type: 'setPickerDate', pickerDate });
             }
         }
     };

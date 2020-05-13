@@ -12,7 +12,8 @@ export default function DayOfWeek(renderProps) {
         startOfMonth,
         endOfMonth,
         week = 0,
-        state: { date }
+        state: { selectedDate },
+        methods
     } = renderProps;
 
     const startOfWeekMoment = DateHelper.myDateToMoment(startOfWeek);
@@ -47,9 +48,10 @@ export default function DayOfWeek(renderProps) {
                             monthOffset === -1 && 'prev-month',
                             monthOffset === 0 && 'curr-month',
                             monthOffset === 1 && 'next-month',
-                            date && DateHelper.equals(date, DateHelper.momentToMyDate(dayMoment)) && 'curr-date'
+                            selectedDate && DateHelper.equals(selectedDate, DateHelper.momentToMyDate(dayMoment)) && 'curr-date'
                         )}
                         aria-label={label}
+                        onClick={() => methods.setSelectedDate(DateHelper.momentToMyDate(dayMoment))}
                     >
                         {dayMoment.format('D')}
                     </div>
