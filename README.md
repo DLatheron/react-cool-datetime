@@ -26,14 +26,14 @@ So the solution? Well here is the one chosen by this implementation:
 
 
 ## TODO
-- Today button;
 - Today indicator;
-- Selected day indicator
 - Click to change year;
 - Click to change month;
-- Could we select the 'best' date picker month/year by ignoring the dom/month if they made the date invalid???
-  - So build dom/month/year if invalid then use 1/month/year if invalid then build 1/1/year??? Otherwise show today?
 
 ### Done
+- ~~Today button~~;
+- ~~Could we select the 'best' date picker month/year by ignoring the dom/month if they made the date invalid???~~
+  - ~~So build dom/month/year if invalid then use 1/month/year if invalid then build 1/1/year??? Otherwise show today?~~
+- ~~Selected day indicator~~
 - ~~Basic implementation~~
 - ~~Implement the date picker dropdown using a full CSS grid;~~

@@ -115,10 +115,18 @@
                 padding: 0;
                 margin: 0;
                 grid-template-columns: repeat(7, 1fr);
-                grid-template-rows: repeat(7, auto);
+                grid-template-rows: repeat(10, auto);
                 grid-template-areas:
                     'prev-year-button year year year year year next-year-button'
-                    'prev-month-button month month month month month next-month-button';
+                    'prev-month-button month month month month month next-month-button'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    'today-button today-button today-button today-button today-button today-button today-button';
 
                 >.year-section {
                     display: contents;
@@ -268,6 +276,14 @@
                             color: lightgray;
                         }
                     }
+                }
+
+                >.today-button {
+                    grid-area: today-button;
+                    font-size: 12px;
+                    padding: 10px 10px;
+                    cursor: pointer;
+                    border-top: 1px solid black;
                 }
             }
         }

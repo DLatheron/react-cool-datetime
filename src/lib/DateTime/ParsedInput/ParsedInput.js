@@ -61,6 +61,7 @@ export default function ParsedInput(renderProps) {
 
     const inputType = InputTypes[renderProps.type];
 
+    const [hasFocus, setHasFocus] = useState(false);
     const [value, setValue] = useState(
         inputType.formatValue
             ? inputType.formatValue(inputType, renderProps.value)
@@ -68,22 +69,21 @@ export default function ParsedInput(renderProps) {
     );
 
     useEffect(() => {
+        if (hasFocus) {
+            return;
+        }
+
+        console.info('Bugger');
         setValue(inputType.formatValue
             ? inputType.formatValue(inputType, renderProps.value)
             : renderProps.value || ''
         );
-    }, [inputType, renderProps.value]);
+    }, [inputType, hasFocus, renderProps.value]);
 
     return (
         <input
             ref={renderProps.inputRef}
-            type='text'//{inputTypes.type}
-            // min={inputTypes.max.toString()}
-            // max={inputTypes.max.toString()}
-            // min={inputTypes.min.toString()}
-            // max={inputTypes.max.toString()}
-            // maxLength={inputTypes.maxLength.toString()}
-            // pattern={inputTypes.pattern}
+            type='text'
             style={{
                 width: `${inputType.maxLength + 1}ch`
             }}
@@ -103,72 +103,22 @@ export default function ParsedInput(renderProps) {
                 if (lengthOk && minOk && maxOk) {
                     renderProps.onChange(intValue);
                 }
-
-                // if (value.match(inputTypes.pattern)) {
-                //     setValue(value);
-                // }
-
-                // if (value.match(inputTypes.pattern) && intValue >= inputTypes.min && intValue <= inputTypes.max) {
-                //     setValue(value);
-                // }
-
-
-                // if (lengthOk && minOk && maxOk) {
-                //     renderProps.onNext();
-                // }
             }}
             placeholder={renderProps.type}
             disabled={props.disabled}
             onBlur={() => {
+                setHasFocus(false);
+
+                console.info('Blur');
                 // Format on loss of input focus.
                 setValue(
                     inputType.formatValue
                         ? inputType.formatValue(inputType, value)
                         : value
                 );
-
-                // const intValue = parseInt(value);
-
-                // const lengthOk = inputType.maxLength === undefined || value.length <= inputType.maxLength;
-                // const minOk = inputType.min === undefined || intValue >= inputType.min;
-                // const maxOk = inputType.max === undefined || intValue <= inputType.max;
-
-                // if (!lengthOk || !minOk || !maxOk) {
-                //     setValue(
-                //         inputType.formatValue
-                //             ? inputType.formatValue(inputType, renderProps.value)
-                //             : renderProps.value
-                //     );
-                // } else {
-                //     const newValue = inputType.formatValue
-                //         ? inputType.formatValue(inputType, value)
-                //         : value;
-
-                //     console.info('Leaving', newValue);
-
-                //     if (renderProps.onChange(newValue)) {
-                //         setValue(
-                //             inputType.formatValue
-                //                 ? inputType.formatValue(inputType, newValue)
-                //                 : newValue
-                //         );
-                //     } else {
-                //         setValue(
-                //             inputType.formatValue
-                //                 ? inputType.formatValue(inputType, renderProps.value)
-                //                 : renderProps.value
-                //         );
-
-                //         console.info('Reverting to', renderProps.value);
-                //     }
-                // }
-
-                // methods.suppressEvent(event);
-
-                // const formattedValue = inputTypes.formatValue && inputTypes.formatValue(renderProps.value, renderProps.onChange);
-                // if (formattedValue) {
-                //     renderProps.onChange(formattedValue);
-                // }
+            }}
+            onFocus={() => {
+                setHasFocus(true);
             }}
         />
     );

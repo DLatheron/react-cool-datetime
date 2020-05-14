@@ -73,6 +73,13 @@ export default function PickerContainer(renderProps) {
                         numWeeks={weeksToDisplayMonth}
                         date={date}
                     />
+
+                    <button
+                        className='today-button'
+                        onClick={() => methods.setSelectedDate(DateHelper.today())}
+                    >
+                        Today
+                    </button>
                 </div>
             </div>
         </div>

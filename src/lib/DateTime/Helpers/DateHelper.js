@@ -1,4 +1,5 @@
 import moment from 'moment';
+import range from 'lodash/range';
 
 export const DateHelper = {
     myDateToMoment: date => {
@@ -97,5 +98,40 @@ export const DateHelper = {
             a.month === b.month &&
             a.year === b.year
         );
-    }
+    },
+
+    getWeek: ({ startOfWeek, week, startOfMonth, endOfMonth }) => {
+        const startOfMonthMoment = DateHelper.myDateToMoment(startOfMonth);
+        const endOfMonthMoment = DateHelper.myDateToMoment(endOfMonth);
+
+        const startOfWeekMoment = DateHelper.myDateToMoment(startOfWeek)
+            .add(week, 'weeks');
+
+        return range(0, 7).reduce((days, dayOfWeek) => {
+            const dayMoment = moment(startOfWeekMoment).add(dayOfWeek, 'days');
+            const label = dayMoment.format('DD-MMM-YYYY');
+            const day = dayMoment.format('D');
+
+            let monthOffset;
+
+            if (dayMoment.isBefore(startOfMonthMoment)) {
+                monthOffset = -1;
+            } else if (dayMoment.isAfter(endOfMonthMoment)) {
+                monthOffset = 1;
+            } else {
+                monthOffset = 0;
+            }
+
+            days.push({
+                day,
+                date: DateHelper.momentToMyDate(dayMoment),
+                label,
+                monthOffset
+            });
+
+            return days;
+        }, []);
+    },
+
+    today: () => DateHelper.momentToMyDate(moment())
 };
