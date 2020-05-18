@@ -40,13 +40,21 @@
                 outline: none;
                 border: none;
                 font-size: 12px;
-                width: 15px;
                 height: calc(100% - 2px);
                 background-color: beige;
                 text-align: center;
 
                 ::placeholder {
                     color: white;
+                }
+
+                &.DD,
+                &.MM {
+                    width: 15px;
+                }
+
+                &.YYYY {
+                    width: 30px;
                 }
             }
         }

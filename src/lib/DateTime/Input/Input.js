@@ -3,7 +3,17 @@ import React, { useRef, useState, useEffect } from 'react';
 import NumberInput from './NumberInput';
 import { DateHelper } from '../Helpers/DateHelper';
 
+function formatValue(value, { length }) {
+    if (value === undefined) {
+        return ''
+    } else {
+        return value.toString().padStart(length, '0');
+    }
+}
+
 export default function Input(renderProps) {
+    const separator = '/';
+
     const {
         methods,
         props,
@@ -22,17 +32,18 @@ export default function Input(renderProps) {
 
     const updateLocalCopyOfDate = newDate => {
         const daysInMonth = DateHelper.daysInMonth(newDate);
+        console.info('updateLocalCopyOfDate: daysInMonth', daysInMonth, newDate);
+
         if (newDate.dayOfMonth > daysInMonth) {
             newDate.dayOfMonth = daysInMonth;
         }
-
-        console.info('newDate', newDate);
 
         setLocalCopyOfDate(newDate);
         methods.setSelectedDate(newDate);
     };
 
     const daysInMonth = DateHelper.daysInMonth(localCopyOfDate);
+    console.info('daysInMonth', daysInMonth, localCopyOfDate);
 
     const dayOfMonth = localCopyOfDate ? localCopyOfDate.dayOfMonth : undefined;
     const month = localCopyOfDate ? localCopyOfDate.month : undefined;
@@ -44,53 +55,70 @@ export default function Input(renderProps) {
             <NumberInput
                 {...renderProps}
                 inputRef={dayOfMonthRef}
-                min={1}
-                max={daysInMonth}
-                length={2}
+                type={{
+                    min: 1,
+                    max: daysInMonth,
+                    length: 2,
+                    format: 'DD',
+                    separator
+                }}
                 disabled={props.disabled}
-                value={dayOfMonth}
-                onBlur={dayOfMonth => {
+                value={dayOfMonth.toString()}
+                onUpdateDate={dayOfMonth => {
                     console.info('DoM onChange');
                     updateLocalCopyOfDate({
                         ...localCopyOfDate,
                         dayOfMonth
                     });
                 }}
+                onFormat={formatValue}
+                onNext={() => monthRef.current.focus()}
             />
-            /
+            {separator}
             <NumberInput
                 {...renderProps}
                 inputRef={monthRef}
-                min={1}
-                max={12}
-                length={2}
+                type={{
+                    min: 1,
+                    max: 12,
+                    length: 2,
+                    format: 'MM',
+                    separator
+                }}
                 disabled={props.disabled}
-                value={month}
-                onBlur={month => {
+                value={month.toString()}
+                onUpdateDate={month => {
                     console.info('month onChange');
                     updateLocalCopyOfDate({
                         ...localCopyOfDate,
                         month
                     });
                 }}
+                onFormat={formatValue}
+                onNext={() => yearRef.current.focus()}
             />
-            /
+            {separator}
             <NumberInput
                 {...renderProps}
                 inputRef={yearRef}
-                type='YYYY'
-                min={0}
-                max={9999}
-                length={4}
+                type={{
+                    min: 0,
+                    max: 9999,
+                    length: 4,
+                    format: 'YYYY',
+                    separator
+                }}
                 disabled={props.disabled}
-                value={year}
-                onBlur={year => {
+                value={year.toString()}
+                onUpdateDate={year => {
                     console.info('year onChange');
                     updateLocalCopyOfDate({
                         ...localCopyOfDate,
                         year
                     });
                 }}
+                onFormat={formatValue}
+                onNext={() => dayOfMonthRef.current.focus()}
             />
         </div>
     );

@@ -136,7 +136,10 @@ export const DateHelper = {
     today: () => DateHelper.momentToMyDate(moment()),
 
     daysInMonth: date => {
-        const isLeapYear = date.year === undefined || DateHelper.myDateToMoment(date).isLeapYear();
+        const isLeapYear = date.year === undefined || DateHelper.myDateToMoment({
+            ...date,
+            dayOfMonth: 1
+        }).isLeapYear();
         const daysInMonth = {
             false: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
             true: [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]

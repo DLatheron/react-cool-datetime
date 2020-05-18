@@ -1,41 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 NumberInput.propTypes = {
     inputRef: PropTypes.object,
-    value: PropTypes.number,
-    min: PropTypes.number,
-    max: PropTypes.number,
-    length: PropTypes.number,
-    onChange: PropTypes.func
+    value: PropTypes.string,
+    type: PropTypes.shape({
+        min: PropTypes.number,
+        max: PropTypes.number,
+        length: PropTypes.number,
+        format: PropTypes.string,
+        separator: PropTypes.string
+    }),
+    onChange: PropTypes.func,
+    onUpdateDate: PropTypes.func,
+    onNext: PropTypes.func,
+    onFormat: PropTypes.func
 };
 
 export default function NumberInput(renderProps) {
-    const { methods } = renderProps;
+    const {
+        methods,
+        onFormat,
+        type,
+        value
+    } = renderProps;
+    const {
+        format,
+        length,
+        max,
+        min,
+        separator
+    } = type;
 
-    const [value, setValue] = useState(renderProps.value || '');
+    const [localValue, setLocalValue] = useState(onFormat(value, type));
+
+    const cascadeNewValueToParent = newValue => {
+        if (newValue > max) {
+            newValue = max;
+        } else if (newValue < min) {
+            newValue = min;
+        }
+
+        setLocalValue(onFormat(newValue, type));
+        renderProps.onUpdateDate(parseInt(newValue));
+    };
 
     useEffect(() => {
-        setValue(renderProps.value);
-    }, [renderProps.value]);
+        setLocalValue(onFormat(value, type));
+    }, [onFormat, value, type]);
 
     return (
         <input
             ref={renderProps.inputRef}
-            className='number-input'
+            className={
+                classNames(
+                    'number-input',
+                    format
+                )
+            }
             type='text'
-            value={value}
+            value={localValue || ''}
             onChange={event => {
                 const newValue = event.target.value;
-                const intValue = parseInt(newValue);
-                if (isNaN(intValue)) {
-                    setValue(undefined);
-                } else {
-                    setValue(intValue);
+                if (newValue.length <= length) {
+                    const intValue = parseInt(newValue);
+
+                    if (isNaN(intValue)) {
+                        setLocalValue('');
+                    } else {
+                        setLocalValue(newValue);
+                    }
                 }
             }}
             onKeyDown={event => {
-                // console.info('onKeyDown', event.key);
                 let suppress = false;
 
                 switch (event.key) {
@@ -54,38 +92,26 @@ export default function NumberInput(renderProps) {
                 }
             }}
             onKeyUp={event => {
-                // console.info('onKeyUp', event.target);
-                switch (event.key) {
-                    case 'Enter':
-                        renderProps.inputRef.current.dispatchEvent(
-                            new KeyboardEvent('keypress', {
-                                key: 'Enter',
-                            })
-                        );
-                        break;
-
-                    case 'ArrowUp':
-                        if (value < renderProps.max) {
-                            setValue(value + 1);
+                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    const intValue = parseInt(localValue);
+                    if (!isNaN(intValue)) {
+                        if (event.key === 'ArrowUp' && intValue < max) {
+                            cascadeNewValueToParent(intValue + 1);
+                        } else if (event.key === 'ArrowDown' && intValue > min) {
+                            cascadeNewValueToParent(intValue - 1);
                         }
-                        break;
-
-                    case 'ArrowDown':
-                        if (value > renderProps.min) {
-                            setValue(value - 1);
-                        }
-                        break;
-
-                    default:
-                        break;
+                    }
                 }
             }}
             onKeyPress={event => {
-                // console.info('onKeyPress', event.key);
-                const length = value === undefined ? 0 : value.length;
-                let suppress;
+                let suppress = true;
 
                 switch (event.key) {
+                    case 'Enter':
+                    case separator:
+                        renderProps.onNext();
+                        break;
+
                     case '0':
                     case '1':
                     case '2':
@@ -96,13 +122,10 @@ export default function NumberInput(renderProps) {
                     case '7':
                     case '8':
                     case '9':
-                        if (length >= renderProps.length) {
-                            suppress = true;
-                        }
+                        suppress = false;
                         break;
 
                     default:
-                        suppress = true;
                         break;
                 }
 
@@ -110,15 +133,12 @@ export default function NumberInput(renderProps) {
                     methods.suppressEvent(event);
                 }
             }}
+            onFocus={() => {
+                renderProps.inputRef.current.selectionStart = 0;
+                renderProps.inputRef.current.selectionEnd = length;
+            }}
             onBlur={() => {
-                console.info('onBlur', value);
-                if (value > renderProps.max) {
-                    renderProps.onBlur(renderProps.max);
-                } else if (value < renderProps.min) {
-                    renderProps.onBlur(renderProps.min);
-                } else {
-                    renderProps.onBlur(value);
-                }
+                cascadeNewValueToParent(localValue);
             }}
         />
     );
