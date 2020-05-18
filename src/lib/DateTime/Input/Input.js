@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 
-import ParsedInput from '../ParsedInput/ParsedInput';
+import NumberInput from './NumberInput';
+import { DateHelper } from '../Helpers/DateHelper';
 
 export default function Input(renderProps) {
     const {
@@ -14,77 +15,83 @@ export default function Input(renderProps) {
     const yearRef = useRef();
 
     const [localCopyOfDate, setLocalCopyOfDate] = useState(state.selectedDate);
-    console.info('localCopyOfDate', localCopyOfDate);
 
     useEffect(() => {
         setLocalCopyOfDate(state.selectedDate);
     }, [state.selectedDate]);
 
+    const updateLocalCopyOfDate = newDate => {
+        const daysInMonth = DateHelper.daysInMonth(newDate);
+        if (newDate.dayOfMonth > daysInMonth) {
+            newDate.dayOfMonth = daysInMonth;
+        }
+
+        console.info('newDate', newDate);
+
+        setLocalCopyOfDate(newDate);
+        methods.setSelectedDate(newDate);
+    };
+
+    const daysInMonth = DateHelper.daysInMonth(localCopyOfDate);
+
+    const dayOfMonth = localCopyOfDate ? localCopyOfDate.dayOfMonth : undefined;
+    const month = localCopyOfDate ? localCopyOfDate.month : undefined;
+    const year = localCopyOfDate ? localCopyOfDate.year : undefined;
+    console.info('localCopyOfDate', localCopyOfDate, dayOfMonth, month, year);
+
     return (
         <div className='input'>
-            <ParsedInput
+            <NumberInput
                 {...renderProps}
                 inputRef={dayOfMonthRef}
-                type='DD'
+                min={1}
+                max={daysInMonth}
+                length={2}
                 disabled={props.disabled}
-                value={localCopyOfDate ? localCopyOfDate.dayOfMonth : undefined}
-                onChange={dayOfMonth => {
-                    const newDate = {
+                value={dayOfMonth}
+                onBlur={dayOfMonth => {
+                    console.info('DoM onChange');
+                    updateLocalCopyOfDate({
                         ...localCopyOfDate,
                         dayOfMonth
-                    };
-
-                    setLocalCopyOfDate(newDate);
-                    methods.setSelectedDate(newDate);
+                    });
                 }}
-                onNext={() => monthRef.current && monthRef.current.focus()}
             />
             /
-            <ParsedInput
+            <NumberInput
                 {...renderProps}
                 inputRef={monthRef}
-                type='MM'
+                min={1}
+                max={12}
+                length={2}
                 disabled={props.disabled}
-                value={localCopyOfDate ? localCopyOfDate.month : undefined}
-                onChange={month => {
-                    const newDate = {
+                value={month}
+                onBlur={month => {
+                    console.info('month onChange');
+                    updateLocalCopyOfDate({
                         ...localCopyOfDate,
                         month
-                    };
-
-                    setLocalCopyOfDate(newDate);
-                    methods.setSelectedDate(newDate);
+                    });
                 }}
-                onNext={() => yearRef.current && yearRef.current.focus()}
             />
             /
-            <ParsedInput
+            <NumberInput
                 {...renderProps}
                 inputRef={yearRef}
                 type='YYYY'
+                min={0}
+                max={9999}
+                length={4}
                 disabled={props.disabled}
-                value={localCopyOfDate ? localCopyOfDate.year : undefined}
-                onChange={year => {
-                    const newDate = {
+                value={year}
+                onBlur={year => {
+                    console.info('year onChange');
+                    updateLocalCopyOfDate({
                         ...localCopyOfDate,
                         year
-                    };
-
-                    setLocalCopyOfDate(newDate);
-                    methods.setSelectedDate(newDate);
+                    });
                 }}
-                onNext={() => dayOfMonthRef.current && dayOfMonthRef.current.focus()}
             />
         </div>
-        // <input
-        //     ref={state.inputRef}
-        //     className='input'
-        //     type='text'
-        //     value={state.inputValue}
-        //     onChange={event => methods.setInputValue(event.target.value)}
-        //     placeholder={props.inputPlaceholder}
-        //     disabled={props.disabled}
-        //     autoFocus
-        // />
     );
 }

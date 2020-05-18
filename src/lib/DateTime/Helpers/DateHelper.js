@@ -133,5 +133,55 @@ export const DateHelper = {
         }, []);
     },
 
-    today: () => DateHelper.momentToMyDate(moment())
+    today: () => DateHelper.momentToMyDate(moment()),
+
+    daysInMonth: date => {
+        const isLeapYear = date.year === undefined || DateHelper.myDateToMoment(date).isLeapYear();
+        const daysInMonth = {
+            false: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+            true: [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        };
+
+        const monthIndex = (date.month || 1) - 1;
+
+        return daysInMonth[isLeapYear][monthIndex];
+    },
+
+    incDayOfMonth: (date, inc) => {
+        const limit = DateHelper.daysInMonth(date);
+
+        let dayOfMonth = date.dayOfMonth + inc;
+
+        if (dayOfMonth > limit) {
+            dayOfMonth = 1;
+        } else if (dayOfMonth < 1) {
+            dayOfMonth = limit;
+        }
+
+        return dayOfMonth;
+    },
+
+    incMonth: (date, inc) => {
+        let month = date.month + inc;
+
+        if (month > 12) {
+            month = 1;
+        } else if (month < 1) {
+            month = 12;
+        }
+
+        return month;
+    },
+
+    incYear: (date, inc) => {
+        let year = date.year + inc;
+
+        if (year > 9999) {
+            year = 0;
+        } else if (year < 0) {
+            year = 9999;
+        }
+
+        return year;
+    }
 };

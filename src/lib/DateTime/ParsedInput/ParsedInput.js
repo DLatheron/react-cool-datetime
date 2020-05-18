@@ -57,7 +57,7 @@ export const InputTypes = {
 // - If the month has been set then we should affect the max day-of-month available (same with year) - otherwise limit to 31.
 
 export default function ParsedInput(renderProps) {
-    const { props } = renderProps;
+    const { methods, props } = renderProps;
 
     const inputType = InputTypes[renderProps.type];
 
@@ -73,7 +73,6 @@ export default function ParsedInput(renderProps) {
             return;
         }
 
-        console.info('Bugger');
         setValue(inputType.formatValue
             ? inputType.formatValue(inputType, renderProps.value)
             : renderProps.value || ''
@@ -103,6 +102,40 @@ export default function ParsedInput(renderProps) {
                 if (lengthOk && minOk && maxOk) {
                     renderProps.onChange(intValue);
                 }
+            }}
+            onKeyDown={event => {
+
+                if (renderProps.onIncrement && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+                    methods.suppressEvent(event);
+                }
+                else if (event.key === 'ArrowRight') {
+                    const position = event.target.selectionStart;
+                    const length = value.length;
+                    console.info('Pos:', position, length);
+
+                    if (position === length) {
+                        renderProps.onNext('start');
+                    }
+                }
+            }}
+            onKeyUp={event => {
+                if (renderProps.onIncrement && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+                    methods.suppressEvent(event);
+                    setValue(renderProps.onIncrement(
+                        event.key === 'ArrowUp'
+                            ? 1
+                            : -1
+                    ));
+                }
+                // } else if (event.key === 'ArrowRight') {
+                //     const position = event.target.selectionStart;
+                //     const length = value.length;
+                //     console.info('Pos:', position, length);
+
+                //     if (position === length) {
+                //         renderProps.onNext();
+                //     }
+                // }
             }}
             placeholder={renderProps.type}
             disabled={props.disabled}

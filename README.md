@@ -26,6 +26,8 @@ So the solution? Well here is the one chosen by this implementation:
 
 
 ## TODO
+- Up/down arrows in input control;
+- BUG: If you select 29 of March 2021 and go down on the month then it will not select February... :(
 - Today indicator;
 - Click to change year;
 - Click to change month;
