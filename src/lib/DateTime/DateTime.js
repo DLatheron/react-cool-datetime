@@ -87,7 +87,8 @@ DateTime.propTypes = {
     handle: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.func
-    ])
+    ]),
+    format: PropTypes.string
 };
 
 DateTime.defaultProps = {
@@ -96,6 +97,7 @@ DateTime.defaultProps = {
     suffix: undefined,
     clear: <FontAwesomeIcon icon={faTimes} />,
     handle: <FontAwesomeIcon icon={faCalendar} />,
+    format: '{DD}/{MM}/{YYYY}'
 };
 
 export default function DateTime(props) {
@@ -143,14 +145,12 @@ export default function DateTime(props) {
         setSelectedDate: selectedDate => {
             // Only ever update the date if it is valid!
             if (DateHelper.isValid(selectedDate)) {
-                console.info('Updaing selected date to', selectedDate);
                 dispatch({ type: 'setSelectedDate', selectedDate });
             }
         },
         setPickerDate: pickerDate => {
             // Only ever update the date if it is valid!
             if (DateHelper.isValid(pickerDate)) {
-                console.info('Updaing picker date to', pickerDate);
                 dispatch({ type: 'setPickerDate', pickerDate });
             }
         }
@@ -175,6 +175,7 @@ export default function DateTime(props) {
                 'datetime',
                 props.disabled && 'disabled'
             )}
+            tabIndex={props.disabled ? '-1' : props.tabIndex}
             disabled={props.disabled}
             tabIndex={props.disabled ? -1 : props.tabIndex}
             onClick={

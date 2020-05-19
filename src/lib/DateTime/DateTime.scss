@@ -1,13 +1,15 @@
-// .number-input {
-//     outline: none;
-//     border: none;
-//     text-align: left;
-//     vertical-align: middle;
-//     background-color: beige;
-//     width: 15px;
-//     font-size: 12px;
-// }
+$day-of-month-dimension: 44px;
+$button-hover-color: gray;
+$day-hover-color: lightgray;
 
+$today-outline-color: red;
+
+$text-color: black;
+$background-color: white;
+$border-color: black;
+
+$day-of-month-selection-color: white;
+$day-of-month-selection-background-color: #00adef;
 
 .datetime {
     >.input-container {
@@ -17,8 +19,8 @@
         align-items: stretch;
 
         height: 30px;
-        border: 1px solid black;
-        background-color: white;
+        border: 1px solid $text-color;
+        background-color: $background-color;
 
         >.prefix {
             grid-area: prefix;
@@ -41,21 +43,28 @@
                 border: none;
                 font-size: 12px;
                 height: calc(100% - 2px);
-                background-color: beige;
-                text-align: center;
+                background-color: $background-color;
+                text-align: right;
 
                 ::placeholder {
-                    color: white;
+                    color: $text-color;
                 }
 
+                &.D,
+                &.M,
                 &.DD,
-                &.MM {
-                    width: 15px;
+                &.MM,
+                &.YY {
+                    width: 16px;
                 }
 
                 &.YYYY {
-                    width: 30px;
+                    width: 32px;
                 }
+            }
+
+            .suffix {
+                padding: 0 4px;
             }
         }
 
@@ -98,6 +107,10 @@
 
             &:not(:disabled) {
                 cursor: pointer;
+
+                &:hover {
+                    color: $button-hover-color;
+                }
             }
         }
     }
@@ -110,8 +123,8 @@
             top: 5px;
             left: 0;
             width: calc(100% - 2px);
-            border: 1px solid red;
-            background-color: white;
+            border: 1px solid $border-color;
+            background-color: $background-color;
 
             &.open {
                 display: block;
@@ -128,8 +141,6 @@
             }
 
             >.body {
-                background-color: beige;
-
                 display: grid;
                 padding: 0;
                 margin: 0;
@@ -150,12 +161,11 @@
                 >.year-section {
                     display: contents;
 
-
                     button {
                         cursor: pointer;
 
                         &:hover {
-                            background-color: lightgray;
+                            color: $button-hover-color;
                         }
                     }
 
@@ -163,7 +173,7 @@
                         font-size: 20px;
                         width: 100%;
                         height: 100%;
-                        border-bottom: 1px solid black;
+                        border-bottom: 1px solid $border-color;
                     }
 
                     >.prev-year-button {
@@ -178,14 +188,14 @@
                         font-size: 22px;
                         font-weight: 900;
                         padding: 10px 0;
-                        border-left: 1px solid black;
-                        border-bottom: 1px solid black;
+                        border-left: 1px solid $border-color;
+                        border-bottom: 1px solid $border-color;
                     }
 
                     >.next-year-button {
                         grid-area: next-year-button;
                         margin: auto;
-                        border-left: 1px solid black;
+                        border-left: 1px solid $border-color;
                     }
                 }
 
@@ -196,7 +206,7 @@
                         cursor: pointer;
 
                         &:hover {
-                            background-color: lightgray;
+                            color: $button-hover-color;
                         }
                     }
 
@@ -204,7 +214,7 @@
                         font-size: 18px;
                         width: 100%;
                         height: 100%;
-                        border-bottom: 1px solid black;
+                        border-bottom: 1px solid $border-color;
                     }
 
                     >.prev-month-button {
@@ -219,14 +229,14 @@
                         font-size: 18px;
                         font-weight: 600;
                         padding: 6px 0;
-                        border-left: 1px solid black;
-                        border-bottom: 1px solid black;
+                        border-left: 1px solid $border-color;
+                        border-bottom: 1px solid $border-color;
                     }
 
                     >.next-month-button {
                         grid-area: next-month-button;
                         margin: auto;
-                        border-left: 1px solid black;
+                        border-left: 1px solid $border-color;
                     }
                 }
 
@@ -249,7 +259,7 @@
                         }
 
                         >.day-of-week {
-                            border-left: 1px solid black;
+                            border-left: 1px solid $border-color;
 
                             &:first-child{
                                 border-left: none;
@@ -264,19 +274,41 @@
                             font-size: 12px;
                             text-align: center;
                             vertical-align: middle;;
-                            padding: 10px 0;
+                            padding: 0;
+
+                            width: calc($day-of-month-dimension + 1px);
+                            height: $day-of-month-dimension;
+                            line-height: $day-of-month-dimension;
 
                             cursor: pointer;
 
                             &:hover {
-                                background-color: lightgray;
-                                color: black;
+                                color: $text-color;
+                                background-color: $day-hover-color;
+                            }
+
+                            &.today {
+                                position: relative;
+
+                                &::after {
+                                    position: absolute;
+                                    content: ' ';
+                                    top: 2px;
+                                    bottom: 2px;
+                                    left: 2px;
+                                    right: 2px;
+                                    border: 2px solid $today-outline-color;
+                                    border-top-right-radius: 50%;
+                                    border-top-left-radius: 50%;
+                                    border-bottom-right-radius: 50%;
+                                    border-bottom-left-radius: 50%;
+                                }
                             }
                         }
 
                         >.day-of-month {
-                            border-top: 1px solid black;
-                            border-left: 1px solid black;
+                            border-top: 1px solid $border-color;
+                            border-left: 1px solid $border-color;
 
                             &:first-child{
                                 border-left: none;
@@ -285,14 +317,14 @@
 
                         >.curr-month {
                             &.curr-date {
-                                background-color: blue;
-                                color: white;
+                                color: $day-of-month-selection-color;
+                                background-color: $day-of-month-selection-background-color;
                             }
                         }
 
                         >.next-month,
                         >.prev-month {
-                            color: lightgray;
+                            color: $day-hover-color;
                         }
                     }
                 }
@@ -300,11 +332,23 @@
                 >.today-button {
                     grid-area: today-button;
                     font-size: 12px;
-                    padding: 10px 10px;
+                    padding: 10px 0;
                     cursor: pointer;
-                    border-top: 1px solid black;
+                    border-top: 1px solid $border-color;
+
+                    &:hover {
+                        color: $button-hover-color;
+                    }
                 }
             }
+        }
+    }
+
+    &:focus-within {
+        outline: none;
+
+        &:not(.disabled) {
+            outline: 2px solid red;
         }
     }
 }

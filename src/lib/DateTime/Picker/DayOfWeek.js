@@ -15,7 +15,8 @@ export default function DayOfWeek(renderProps) {
                 day,
                 date,
                 label,
-                monthOffset
+                monthOffset,
+                today
             }) =>
                 <div
                     key={label}
@@ -25,7 +26,8 @@ export default function DayOfWeek(renderProps) {
                         monthOffset === -1 && 'prev-month',
                         monthOffset === 0 && 'curr-month',
                         monthOffset === 1 && 'next-month',
-                        state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'curr-date'
+                        state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'curr-date',
+                        today && 'today'
                     )}
                     aria-label={label}
                     onClick={() => methods.setSelectedDate(date)}

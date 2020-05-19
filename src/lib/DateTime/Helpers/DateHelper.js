@@ -1,7 +1,103 @@
 import moment from 'moment';
 import range from 'lodash/range';
 
+function formatValue(value, { format, length }) {
+    if (value === undefined) {
+        return '';
+    } else {
+        if (format === 'DD' || format === 'MM' || format === 'YY' || format === 'YYYY') {
+            return value.toString().padStart(length, '0');
+        } else {
+            return value.toString();
+        }
+    }
+}
+
+const formatTypes = {
+    D: {
+        property: 'dayOfMonth',
+        min: 1,
+        max: 'daysInMonth',
+        length: 2,
+        format: 'D',
+        formatValue
+    },
+    DD: {
+        property: 'dayOfMonth',
+        min: 1,
+        max: 'daysInMonth',
+        length: 2,
+        format: 'DD',
+        formatValue
+    },
+    M: {
+        property: 'month',
+        min: 1,
+        max: 12,
+        length: 2,
+        format: 'M',
+        formatValue
+    },
+    MM: {
+        property: 'month',
+        min: 1,
+        max: 12,
+        length: 2,
+        format: 'MM',
+        formatValue
+    },
+    YY: {
+        property: 'year',
+        min: 0,
+        max: 99,
+        length: 2,
+        format: 'YY',
+        formatValue
+    },
+    YYYY: {
+        property: 'year',
+        min: 0,
+        max: 9999,
+        length: 4,
+        format: 'YYYY',
+        formatValue
+    }
+}
+
 export const DateHelper = {
+    parseFormat: format => {
+        const tokenRegExp = /{(.*?)}/g;
+        const matches = [...format.matchAll(tokenRegExp)];
+
+        console.info(matches);
+
+        const types = [];
+
+        for (let i = 0; i < matches.length; ++i) {
+            const match = matches[i];
+            const token = match[0];
+            const length = token.length;
+            const type = match[1];
+            const { index: start } = match;
+
+            const end = (start + length);
+            const separator = (i < matches.length - 1) && format.substr(end, matches[i + 1].index - end);
+
+            console.info('match', i, token, length, type, start, end, separator);
+
+            types.push({
+                ...formatTypes[type],
+                defaultValue: DateHelper.today()[formatTypes[type].property],
+                suffix: separator,
+                separator: (separator.length === 1) ? separator : undefined
+            });
+        }
+
+        console.info(types);
+
+        return types;
+    },
+
     myDateToMoment: date => {
         return moment({
             date: date.dayOfMonth,
@@ -103,6 +199,7 @@ export const DateHelper = {
     getWeek: ({ startOfWeek, week, startOfMonth, endOfMonth }) => {
         const startOfMonthMoment = DateHelper.myDateToMoment(startOfMonth);
         const endOfMonthMoment = DateHelper.myDateToMoment(endOfMonth);
+        const todayMoment = DateHelper.myDateToMoment(DateHelper.today());
 
         const startOfWeekMoment = DateHelper.myDateToMoment(startOfWeek)
             .add(week, 'weeks');
@@ -122,11 +219,14 @@ export const DateHelper = {
                 monthOffset = 0;
             }
 
+            const today = dayMoment.isSame(todayMoment);
+
             days.push({
                 day,
                 date: DateHelper.momentToMyDate(dayMoment),
                 label,
-                monthOffset
+                monthOffset,
+                today
             });
 
             return days;

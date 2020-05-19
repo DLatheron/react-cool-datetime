@@ -25,14 +25,34 @@ So the solution? Well here is the one chosen by this implementation:
 - As the value in the input-parsing part of the control is changed the date-picker will automatically update to show the parsed date;
 
 
-## TODO
-- Up/down arrows in input control;
+## TODO:
+- Full support for undefined dates throughout;
+- Year selection on dropdown (type or select?);
+- Month selection on dropdown (type of select?);
+- Date parsing built from components;
+- Text input:
+  - MMM component;
+  - MMMM component;
+  - st/nd/rd/th suffix???:
+    - Thursday, [14]th of [September] [2020] at [11]:[00]:[12] [AM]
+- day output?
+- Time:
+  - HH
+  - h
+  - mm
+  - m
+  - ss
+- Free form text
 - BUG: If you select 29 of March 2021 and go down on the month then it will not select February... :(
-- Today indicator;
 - Click to change year;
 - Click to change month;
+- Option to not have a drop down;
 
 ### Done
+- ~~BUG: Clear the YYYY field and you'll get 0NaN~~
+- ~~Today indicator;~~
+- ~~Separator support;~~
+- ~~Up/down arrows in input control;~~
 - ~~Today button~~;
 - ~~Could we select the 'best' date picker month/year by ignoring the dom/month if they made the date invalid???~~
   - ~~So build dom/month/year if invalid then use 1/month/year if invalid then build 1/1/year??? Otherwise show today?~~

@@ -21,6 +21,7 @@ NumberInput.propTypes = {
 export default function NumberInput(renderProps) {
     const {
         methods,
+        props,
         onFormat,
         type,
         value
@@ -30,20 +31,25 @@ export default function NumberInput(renderProps) {
         length,
         max,
         min,
+        defaultValue,
         separator
     } = type;
 
     const [localValue, setLocalValue] = useState(onFormat(value, type));
 
     const cascadeNewValueToParent = newValue => {
-        if (newValue > max) {
-            newValue = max;
-        } else if (newValue < min) {
-            newValue = min;
+        let intValue = parseInt(newValue);
+        console.info('intValue', intValue, defaultValue);
+        if (isNaN(intValue)) {
+            intValue = defaultValue;
+        } else if (intValue > max) {
+            intValue = max;
+        } else if (intValue < min) {
+            intValue = min;
         }
 
-        setLocalValue(onFormat(newValue, type));
-        renderProps.onUpdateDate(parseInt(newValue));
+        setLocalValue(onFormat(intValue, type));
+        renderProps.onUpdateDate(intValue);
     };
 
     useEffect(() => {
@@ -53,6 +59,7 @@ export default function NumberInput(renderProps) {
     return (
         <input
             ref={renderProps.inputRef}
+            disabled={props.disabled}
             className={
                 classNames(
                     'number-input',
@@ -73,6 +80,7 @@ export default function NumberInput(renderProps) {
                     }
                 }
             }}
+            placeholder={type.format}
             onKeyDown={event => {
                 let suppress = false;
 

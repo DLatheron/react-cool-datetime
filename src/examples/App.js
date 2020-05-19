@@ -13,7 +13,7 @@ const examples = {
         title: 'Basic Example',
         props: {
             open: true,
-
+            format: '{D}/{M}/{YYYY}'
         }
     }
 };
