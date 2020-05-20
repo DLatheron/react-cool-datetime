@@ -177,7 +177,6 @@ export default function DateTime(props) {
             )}
             tabIndex={props.disabled ? '-1' : props.tabIndex}
             disabled={props.disabled}
-            tabIndex={props.disabled ? -1 : props.tabIndex}
             onClick={
                 !props.disabled
                     ? event => {

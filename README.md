@@ -26,6 +26,7 @@ So the solution? Well here is the one chosen by this implementation:
 
 
 ## TODO:
+- Improved hierarchy where the contents of the date picker are calculated once (and cached) at the top level then cascaded to lower-level. This will allow the picker to be readily replaced with other bits as necessary (two/three months) or an entire year...
 - Full support for undefined dates throughout;
 - Year selection on dropdown (type or select?);
 - Month selection on dropdown (type of select?);

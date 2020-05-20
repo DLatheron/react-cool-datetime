@@ -1,26 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import { DateHelper } from '../Helpers/DateHelper';
-import DayOfMonth from './DayOfMonth';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
-
+// import SingleMonthPicker from './SingleMonthPicker';
+import DoubleMonthPicker from './DoubleMonthPicker';
 
 export default function PickerContainer(renderProps) {
     const {
-        methods,
         state
     } = renderProps;
 
     const date = state.pickerDate
         ? state.pickerDate
         : DateHelper.defaultDate();
-
-    const startOfMonth = DateHelper.startOfMonth(date);
-    const startOfMonthWeek = DateHelper.startOfMonthWeek(startOfMonth);
-    const endOfMonth = DateHelper.endOfMonth(startOfMonth);
-    const weeksToDisplayMonth = DateHelper.weeksToDisplayMonth(startOfMonthWeek, endOfMonth);
 
     return (
         <div className='picker-container'>
@@ -32,55 +23,8 @@ export default function PickerContainer(renderProps) {
                     )
                 }
             >
-                <div className='body'>
-                    <div className='year-section'>
-                        <button
-                            className='year-button prev-year-button'
-                            onClick={() => methods.setPickerDate(DateHelper.prevYear(date))}
-                        >
-                            <FontAwesomeIcon icon={faCaretLeft} />
-                        </button>
-                        <span className='year'>{date.year}</span>
-                        <button
-                            className='year-button next-year-button'
-                            onClick={() => methods.setPickerDate(DateHelper.nextYear(date))}
-                        >
-                            <FontAwesomeIcon icon={faCaretRight} />
-                        </button>
-                    </div>
-
-                    <div className='month-section'>
-                        <button
-                            className='month-button prev-month-button'
-                            onClick={() => methods.setPickerDate(DateHelper.prevMonth(date))}
-                        >
-                            <FontAwesomeIcon icon={faCaretLeft} />
-                        </button>
-                        <span className='month'>{DateHelper.getLongMonth(date)}</span>
-                        <button
-                            className='month-button next-month-button'
-                            onClick={() => methods.setPickerDate(DateHelper.nextMonth(date))}
-                        >
-                            <FontAwesomeIcon icon={faCaretRight} />
-                        </button>
-                    </div>
-
-                    <DayOfMonth
-                        {...renderProps}
-                        startOfMonthWeek={startOfMonthWeek}
-                        startOfMonth={startOfMonth}
-                        endOfMonth={endOfMonth}
-                        numWeeks={weeksToDisplayMonth}
-                        date={date}
-                    />
-
-                    <button
-                        className='today-button'
-                        onClick={() => methods.setSelectedDate(DateHelper.today())}
-                    >
-                        Today
-                    </button>
-                </div>
+                {/* <SingleMonthPicker {...renderProps} date={date} /> */}
+                <DoubleMonthPicker {...renderProps} date={date} />
             </div>
         </div>
     );

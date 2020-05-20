@@ -286,5 +286,48 @@ export const DateHelper = {
         }
 
         return year;
+    },
+
+    getMonthWeekDetails: (month, year, numMonths = 1) => {
+        const date = {
+            dayOfMonth: 1,
+            month,
+            year
+        };
+
+        return range(0, numMonths).map(monthOffset => {
+            if (monthOffset > 0) {
+                ++date.month;
+                if (date.month > 12) {
+                    ++date.year;
+                    date.month = 1;
+                }
+
+                console.info('date', date);
+            }
+
+            const startOfMonth = DateHelper.startOfMonth(date);
+            const startOfWeek = DateHelper.startOfMonthWeek(startOfMonth);
+            const endOfMonth = DateHelper.endOfMonth(startOfMonth);
+            const numWeeksToDisplayMonth = DateHelper.weeksToDisplayMonth(startOfWeek, endOfMonth);
+
+            const weeks = range(0, numWeeksToDisplayMonth).map(week => {
+                return {
+                    index: week,
+                    days: DateHelper.getWeek({
+                        startOfWeek,
+                        week,
+                        startOfMonth,
+                        endOfMonth
+                    })
+                };
+            });
+
+            return {
+                year: date.year,
+                monthName: DateHelper.getLongMonth(date),
+                weeks
+            };
+        });
     }
 };
