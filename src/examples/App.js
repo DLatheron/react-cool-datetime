@@ -3,6 +3,8 @@ import { DateTime } from '../lib';
 import styled from 'styled-components';
 import _ from 'lodash';
 
+import DoubleMonthPicker from '../lib/DateTime/Picker/DoubleMonthPicker';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
 
@@ -105,13 +107,15 @@ function App() {
     const [suffix, setSuffix] = useState(false);
     const [handle, setHandle] = useState(false);
     const [disabled, setDisabled] = useState(false);
+    const [dualMonth, setDualMonth] = useState(false);
 
     const overrides = {
         clear: clear ? () => <FontAwesomeIcon icon={faTimes} /> : null,
         prefix: prefix ? () => <FontAwesomeIcon icon={faCaretRight} /> : undefined,
         suffix: suffix ? () => <FontAwesomeIcon icon={faCaretLeft} /> : undefined,
         handle: handle ? ({ state: { open } }) => <FontAwesomeIcon icon={open ? faCaretRight : faCaretLeft} /> : undefined,
-        disabled
+        disabled,
+        datePicker: dualMonth ? DoubleMonthPicker : undefined
     };
 
     return (
@@ -133,7 +137,8 @@ function App() {
                     { id: 'prefix', value: prefix, type: 'checkbox', setValue: setPrefix, text: 'Prefix' },
                     { id: 'suffix', value: suffix, type: 'checkbox', setValue: setSuffix, text: 'Suffix' },
                     { id: 'handle', value: handle, type: 'checkbox', setValue: setHandle, text: 'Handle' },
-                    { id: 'disabled', value: disabled, type: 'checkbox', setValue: setDisabled, text: 'Disabled' }
+                    { id: 'disabled', value: disabled, type: 'checkbox', setValue: setDisabled, text: 'Disabled' },
+                    { id: 'dualMonth', value: dualMonth, type: 'checkbox', setValue: setDualMonth, text: 'Two Months at a time' }
                 ]
                     .map(({ id, value, type, setValue, min, max, text }) => {
                         return (

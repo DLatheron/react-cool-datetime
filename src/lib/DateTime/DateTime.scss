@@ -65,6 +65,8 @@ $day-of-month-selection-background-color: #00adef;
 
             .suffix {
                 padding: 0 4px;
+                margin: auto;
+                vertical-align: middle;
             }
         }
 
@@ -121,8 +123,9 @@ $day-of-month-selection-background-color: #00adef;
         >.picker {
             position: absolute;
             top: 5px;
+            min-width: calc(100% - 2px);
+            overflow: visible;
             left: 0;
-            width: auto;//calc(100% - 2px);
             border: 1px solid $border-color;
             background-color: $background-color;
 
@@ -277,7 +280,6 @@ $day-of-month-selection-background-color: #00adef;
                                 vertical-align: middle;;
                                 padding: 0;
 
-                                width: calc($day-of-month-dimension + 1px);
                                 height: $day-of-month-dimension;
                                 line-height: $day-of-month-dimension;
 
@@ -470,7 +472,7 @@ $day-of-month-selection-background-color: #00adef;
                                 vertical-align: middle;;
                                 padding: 0;
 
-                                width: calc($day-of-month-dimension + 1px);
+                                width: 100%;
                                 height: $day-of-month-dimension;
                                 line-height: $day-of-month-dimension;
 

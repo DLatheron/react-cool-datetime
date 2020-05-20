@@ -5,6 +5,7 @@ import { useOutsideClick } from '../Hooks';
 
 import InputContainer from './Input/InputContainer';
 import PickerContainer from './Picker/PickerContainer';
+import SingleMonthPicker from './Picker/SingleMonthPicker';
 import { DateHelper } from './Helpers/DateHelper';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -88,7 +89,8 @@ DateTime.propTypes = {
         PropTypes.node,
         PropTypes.func
     ]),
-    format: PropTypes.string
+    format: PropTypes.string,
+    datePicker: PropTypes.func
 };
 
 DateTime.defaultProps = {
@@ -97,7 +99,8 @@ DateTime.defaultProps = {
     suffix: undefined,
     clear: <FontAwesomeIcon icon={faTimes} />,
     handle: <FontAwesomeIcon icon={faCalendar} />,
-    format: '{DD}/{MM}/{YYYY}'
+    format: '{DD}/{MM}/{YYYY}',
+    datePicker: SingleMonthPicker
 };
 
 export default function DateTime(props) {

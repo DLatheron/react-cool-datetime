@@ -2,10 +2,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { DateHelper } from '../Helpers/DateHelper';
 // import SingleMonthPicker from './SingleMonthPicker';
-import DoubleMonthPicker from './DoubleMonthPicker';
+// import DoubleMonthPicker from './DoubleMonthPicker';
 
 export default function PickerContainer(renderProps) {
     const {
+        props,
         state
     } = renderProps;
 
@@ -24,7 +25,8 @@ export default function PickerContainer(renderProps) {
                 }
             >
                 {/* <SingleMonthPicker {...renderProps} date={date} /> */}
-                <DoubleMonthPicker {...renderProps} date={date} />
+                {/* <DoubleMonthPicker {...renderProps} date={date} /> */}
+                {props.datePicker({ ...renderProps, date })}
             </div>
         </div>
     );

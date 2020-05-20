@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import { DateHelper } from '../Helpers/DateHelper';
-import range from 'lodash/range';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
@@ -20,8 +19,6 @@ export default function SingleMonthPicker(renderProps) {
     const months = useMemo(() =>
         DateHelper.getMonthWeekDetails(date.month, date.year)
     , [date]);
-
-    console.info('months', months);
 
     return (
         <div className='body single-month-picker'>

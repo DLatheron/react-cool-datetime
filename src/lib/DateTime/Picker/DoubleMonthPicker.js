@@ -21,8 +21,6 @@ export default function DoubleMonthPicker(renderProps) {
         DateHelper.getMonthWeekDetails(date.month, date.year, 2)
     , [date]);
 
-    console.info('months', months);
-
     return (
         <div className='body double-month-picker'>
             <div className='month-section'>
