@@ -148,6 +148,7 @@ $day-of-month-selection-background-color: #00adef;
                                 text-align: center;
                                 vertical-align: middle;;
                                 padding: 0;
+                                position: relative;
 
                                 height: $day-of-month-dimension;
                                 line-height: $day-of-month-dimension;
@@ -176,6 +177,35 @@ $day-of-month-selection-background-color: #00adef;
                                         border-bottom-left-radius: 50%;
                                     }
                                 }
+
+                                >.selection {
+                                    position: absolute;
+                                    top: 0;
+                                    bottom: 0;
+                                    left: 0;
+                                    right: 0;
+
+                                    &.selection-start-date {
+                                        color: $day-of-month-selection-color;
+                                        background-color: $day-of-month-selection-background-color;
+
+                                        border-top-left-radius: 50%;
+                                        border-bottom-left-radius: 50%;
+                                    }
+
+                                    &.selection-end-date {
+                                        color: $day-of-month-selection-color;
+                                        background-color: $day-of-month-selection-background-color;
+
+                                        border-top-right-radius: 50%;
+                                        border-bottom-right-radius: 50%;
+                                    }
+
+                                    &.selection-in-range {
+                                        color: $day-of-month-selection-color;
+                                        background-color: $day-of-month-selection-background-color;
+                                    }
+                                }
                             }
 
                             >.day-of-month {
@@ -191,21 +221,6 @@ $day-of-month-selection-background-color: #00adef;
                                 &.curr-date {
                                     color: $day-of-month-selection-color;
                                     background-color: $day-of-month-selection-background-color;
-                                }
-
-                                &.selection-start-date {
-                                    color: $day-of-month-selection-color;
-                                    background-color: green;
-                                }
-
-                                &.selection-end-date {
-                                    color: $day-of-month-selection-color;
-                                    background-color: red;
-                                }
-
-                                &.selection-in-range {
-                                    color: $day-of-month-selection-color;
-                                    background-color: yellow;
                                 }
                             }
 

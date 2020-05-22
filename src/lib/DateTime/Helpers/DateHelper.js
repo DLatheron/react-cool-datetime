@@ -204,6 +204,13 @@ export const DateHelper = {
         return dateMoment.isAfter(startMoment) && dateMoment.isBefore(endMoment);
     },
 
+    isBefore: (a, b) => {
+        const aMoment = DateHelper.myDateToMoment(a);
+        const bMoment = DateHelper.myDateToMoment(b);
+
+        return aMoment.isBefore(bMoment);
+    },
+
     getWeek: ({ startOfWeek, week, startOfMonth, endOfMonth }) => {
         const startOfMonthMoment = DateHelper.myDateToMoment(startOfMonth);
         const endOfMonthMoment = DateHelper.myDateToMoment(endOfMonth);

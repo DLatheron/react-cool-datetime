@@ -74,27 +74,59 @@ export default function SingleMonthPicker(renderProps) {
                             className='week'
                         >
                             {
-                                week.days.map(({ day, date, label, monthOffset, today }) =>
-                                    <div
-                                        key={label}
-                                        data-id={label}
-                                        className={classNames(
-                                            'day-of-month',
-                                            monthOffset === -1 && 'prev-month',
-                                            monthOffset === 0 && 'curr-month',
-                                            monthOffset === 1 && 'next-month',
-                                            props.selectionType === 'single' && state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'curr-date',
-                                            props.selectionType === 'range' && state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'selection-start-date',
-                                            props.selectionType === 'range' && state.selectedEndDate && DateHelper.equals(state.selectedEndDate, date) && 'selection-end-date',
-                                            props.selectionType === 'range' &&  state.selectedDate && state.selectedEndDate && DateHelper.inRangeExclusive(date, state.selectedDate, state.selectedEndDate) && 'selection-in-range',
-                                            today && 'today'
-                                        )}
-                                        aria-label={label}
-                                        onClick={() => methods.setSelectedDate(date)}
-                                    >
-                                        {day}
-                                    </div>
-                                )
+                                week.days.map(({ day, date, label, monthOffset, today }) => {
+                                    const classes = [];
+
+                                    if (props.selectionType === 'single') {
+                                        if (state.selectedDate &&
+                                            DateHelper.equals(state.selectedDate, date)) {
+                                            classes.push('curr-date');
+                                        }
+                                    } else if (props.selectionType === 'range') {
+                                        if (state.selectedDate &&
+                                            DateHelper.equals(state.selectedDate, date)) {
+                                            classes.push('selection-start-date');
+                                        }
+                                        if (state.selectedEndDate &&
+                                            DateHelper.equals(state.selectedEndDate, date)) {
+                                            classes.push('selection-end-date');
+                                        }
+                                        if (state.selectedDate &&
+                                            state.selectedEndDate &&
+                                            DateHelper.inRangeExclusive(date, state.selectedDate, state.selectedEndDate)) {
+                                            classes.push('selection-in-range');
+                                        }
+                                    }
+
+                                    return (
+                                        <div
+                                            key={label}
+                                            data-id={label}
+                                            className={classNames(
+                                                'day-of-month',
+                                                monthOffset === -1 && 'prev-month',
+                                                monthOffset === 0 && 'curr-month',
+                                                monthOffset === 1 && 'next-month',
+                                                today && 'today'
+                                            )}
+                                            aria-label={label}
+                                            onClick={() => methods.setSelectedDate(date)}
+                                        >
+                                            {day}
+                                            {
+                                                classes.length > 0 &&
+                                                    <div
+                                                        className={classNames(
+                                                            'selection',
+                                                            classes
+                                                        )}
+                                                    >
+                                                        {day}
+                                                    </div>
+                                            }
+                                        </div>
+                                    );
+                                })
                             }
                         </div>
                     )

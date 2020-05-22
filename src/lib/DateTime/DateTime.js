@@ -172,7 +172,13 @@ export default function DateTime(props) {
                             dispatch({ type: 'setSelectedDate', selectedDate });
                         } else if (!state.selectedEndDate) {
                             console.info('Set end of range');
-                            dispatch({ type: 'setSelectedEndDate', selectedDate });
+
+                            if (!DateHelper.isBefore(state.selectedDate, selectedDate)) {
+                                dispatch({ type: 'setSelectedEndDate', selectedDate: state.selectedDate });
+                                dispatch({ type: 'setSelectedDate', selectedDate });
+                            } else {
+                                dispatch({ type: 'setSelectedEndDate', selectedDate });
+                            }
                         } else {
                             // ????
                             console.info('Set start of range and cllear end of range');
