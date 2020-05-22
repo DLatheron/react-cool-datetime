@@ -26,7 +26,6 @@ So the solution? Well here is the one chosen by this implementation:
 
 
 ## TODO:
-- Improved hierarchy where the contents of the date picker are calculated once (and cached) at the top level then cascaded to lower-level. This will allow the picker to be readily replaced with other bits as necessary (two/three months) or an entire year...
 - Full support for undefined dates throughout;
 - Year selection on dropdown (type or select?);
 - Month selection on dropdown (type of select?);
@@ -44,7 +43,6 @@ So the solution? Well here is the one chosen by this implementation:
   - m
   - ss
 - Free form text
-- BUG: If you select 29 of March 2021 and go down on the month then it will not select February... :(
 - Click to change year;
 - Click to change month;
 - Option to not have a drop down;
@@ -54,6 +52,8 @@ So the solution? Well here is the one chosen by this implementation:
   - Array of function that return true (day enabled), false (day disabled) or undefined (continue iteration of functions).
 
 ### Done
+- ~~BUG: If you select 29 of March 2021 and go down on the month then it will not select February... :(~~
+- ~~Improved hierarchy where the contents of the date picker are calculated once (and cached) at the top level then cascaded to lower-level. This will allow the picker to be readily replaced with other bits as necessary (two/three months) or an entire year...~~
 - ~~BUG: Clear the YYYY field and you'll get 0NaN~~
 - ~~Today indicator;~~
 - ~~Separator support;~~
