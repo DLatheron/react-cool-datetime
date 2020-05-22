@@ -48,6 +48,10 @@ So the solution? Well here is the one chosen by this implementation:
 - Click to change year;
 - Click to change month;
 - Option to not have a drop down;
+- Disabling days:
+  - Ability to enable, disable days in picker;
+  - Ability to set min and max dates;
+  - Array of function that return true (day enabled), false (day disabled) or undefined (continue iteration of functions).
 
 ### Done
 - ~~BUG: Clear the YYYY field and you'll get 0NaN~~

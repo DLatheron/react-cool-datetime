@@ -1,0 +1,323 @@
+$day-of-month-dimension: 28px;
+$button-hover-color: gray;
+$day-hover-color: lightgray;
+
+$today-outline-color: red;
+
+$text-color: black;
+$background-color: white;
+$border-color: black;
+
+$day-of-month-selection-color: white;
+$day-of-month-selection-background-color: #00adef;
+
+.datetime {
+    >.picker-container {
+        >.picker {
+            min-width: calc(100% - 2px);
+
+            >.body {
+                &.twelve-month-picker {
+                    display: grid;
+                    padding: 0;
+                    margin: 0;
+                    grid-template-columns: 44px auto 44px;
+                    grid-template-rows: auto auto;
+                    grid-template-areas:
+                        'prev-year-button year next-year-button'
+                        'months months months';
+
+                    >.year-section {
+                        display: contents;
+
+                        button {
+                            cursor: pointer;
+
+                            &:hover {
+                                color: $button-hover-color;
+                            }
+                        }
+
+                        >.year-button {
+                            font-size: 20px;
+                            width: 100%;
+                            height: 100%;
+                            border-bottom: 1px solid $border-color;
+                        }
+
+                        >.prev-year-button {
+                            grid-area: prev-year-button;
+                            margin: auto;
+                        }
+
+                        >.year {
+                            grid-area: year;
+                            text-align: center;
+                            vertical-align: middle;
+                            font-size: 22px;
+                            font-weight: 900;
+                            padding: 10px 0;
+                            border-bottom: 1px solid $border-color;
+                        }
+
+                        >.next-year-button {
+                            grid-area: next-year-button;
+                            margin: auto;
+                        }
+                    }
+
+                    >.month-section {
+                        grid-area: months;
+                        width: fit-content;
+                        display: grid;
+                        grid-template-columns: 1fr repeat(6 * 7, auto);
+                        grid-template-rows: repeat(12, auto);
+
+                        background: white;
+
+                        >.month-header {
+                            display: contents;
+
+                            >.header-month-name {
+                                font-size: 16px;
+                                line-height: $day-of-month-dimension;
+                                font-weight: 600;
+                                text-align: center;
+                                vertical-align: middle;
+                                border-right: 1px solid $border-color;
+                                border-bottom: 1px solid $border-color;
+                            }
+
+                            >.header-day-of-week {
+                                font-size: 14px;
+                                font-weight: 600;
+                                text-align: center;
+                                vertical-align: middle;
+                                line-height: $day-of-month-dimension;
+                                border-right: 1px solid $border-color;
+                                border-bottom: 1px solid $border-color;
+
+                                &:last-child {
+                                    border-right: none;
+                                }
+                            }
+                        }
+
+                        >.month {
+                            display: contents;
+
+                            &:last-child {
+                                >.month-name {
+                                    border-bottom: none;
+                                }
+
+                                >.day-of-month {
+                                    border-bottom: none;
+                                }
+                            }
+
+                            >.month-name {
+                                grid-column: 1 / 2;
+                                padding: 0px 10px;
+                                font-size: 16px;
+                                text-align: right;
+                                vertical-align: middle;
+                                height: $day-of-month-dimension;
+                                line-height: $day-of-month-dimension;
+                                font-weight: 600;
+                                border-right: 1px solid $border-color;
+                                border-bottom: 1px solid $border-color;
+                            }
+
+                            >.day-of-month  {
+                                font-size: 14px;
+                                text-align: center;
+                                vertical-align: middle;;
+                                padding: 0;
+
+                                width: $day-of-month-dimension;
+                                height: $day-of-month-dimension;
+                                line-height: $day-of-month-dimension;
+
+                                :not(.blank-day) {
+                                    cursor: pointer;
+                                }
+
+                                &.curr-date {
+                                    color: $day-of-month-selection-color;
+                                    background-color: $day-of-month-selection-background-color;
+                                }
+
+                                &:hover:not(.blank):not(.curr-date) {
+                                    color: $text-color;
+                                    background-color: $day-hover-color;
+                                }
+
+                                &.today {
+                                    position: relative;
+
+                                    &::after {
+                                        position: absolute;
+                                        content: ' ';
+                                        top: 0;
+                                        bottom: 0;
+                                        left: 0;
+                                        right: 0;
+                                        border: 2px solid $today-outline-color;
+                                        border-top-right-radius: 50%;
+                                        border-top-left-radius: 50%;
+                                        border-bottom-right-radius: 50%;
+                                        border-bottom-left-radius: 50%;
+                                    }
+                                }
+
+                                &.blank-day {
+                                    background-color: #eee;
+                                }
+
+                                &:last-child {
+                                    border-right: none;
+                                }
+                            }
+
+                            >.day-of-month {
+                                border-bottom: 1px solid $border-color;
+                                border-right: 1px solid $border-color;
+                            }
+
+                            >.next-month,
+                            >.prev-month {
+                                color: $day-hover-color;
+                            }
+                        }
+
+                        &:last-child {
+                            >.day-of-month {
+                                &:last-child {
+                                    border-right: none;
+                                }
+                            }
+
+                            border-bottom: none;
+                        }
+
+                    }
+
+                    // >.day-of-month-section {
+                    //     display: contents;
+                    //     // grid-template-columns: repeat(7, 1fr);
+                    //     // grid-template-rows: repeat(6, auto);
+                    //     // grid-template-areas:
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                    //     //     'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month';
+
+                    //     align-items: center;
+                    //     align-self: center;
+                    //     font-size: 14px;
+
+                    //     >.header {
+                    //         display: contents;
+                    //         grid-row: 0;
+
+                    //         >.day-of-week {
+                    //             text-align: center;
+                    //             vertical-align: middle;;
+                    //             padding: 10px 0;
+                    //             font-weight: 600;
+                    //         }
+
+                    //         >.day-of-week {
+                    //             border-left: 1px solid $border-color;
+
+                    //             &:first-child{
+                    //                 border-left: none;
+                    //             }
+                    //         }
+                    //     }
+
+                    //     >.week {
+                    //         display: contents;
+
+                    //         >.day-of-month  {
+                    //             font-size: 12px;
+                    //             text-align: center;
+                    //             vertical-align: middle;;
+                    //             padding: 0;
+
+                    //             width: 100%;
+                    //             height: $day-of-month-dimension;
+                    //             line-height: $day-of-month-dimension;
+
+                    //             :not(.blank-day) {
+                    //                 cursor: pointer;
+                    //             }
+
+                    //             &:hover:not(.blank-day) {
+                    //                 color: $text-color;
+                    //                 background-color: $day-hover-color;
+                    //             }
+
+                    //             &.today {
+                    //                 position: relative;
+
+                    //                 &::after {
+                    //                     position: absolute;
+                    //                     content: ' ';
+                    //                     top: 2px;
+                    //                     bottom: 2px;
+                    //                     left: 2px;
+                    //                     right: 2px;
+                    //                     border: 2px solid $today-outline-color;
+                    //                     border-top-right-radius: 50%;
+                    //                     border-top-left-radius: 50%;
+                    //                     border-bottom-right-radius: 50%;
+                    //                     border-bottom-left-radius: 50%;
+                    //                 }
+                    //             }
+                    //         }
+
+                    //         >.day-of-month {
+                    //             border-top: 1px solid $border-color;
+                    //             border-left: 1px solid $border-color;
+
+                    //             &:first-child{
+                    //                 border-left: none;
+                    //             }
+                    //         }
+
+                    //         >.curr-month {
+                    //             &.curr-date {
+                    //                 color: $day-of-month-selection-color;
+                    //                 background-color: $day-of-month-selection-background-color;
+                    //             }
+                    //         }
+
+                    //         >.next-month,
+                    //         >.prev-month {
+                    //             color: $day-hover-color;
+                    //         }
+                    //     }
+                    // }
+
+                    >.today-button {
+                        grid-area: today-button;
+                        font-size: 12px;
+                        padding: 10px 0;
+                        cursor: pointer;
+                        border-top: 1px solid $border-color;
+
+                        &:hover {
+                            color: $button-hover-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

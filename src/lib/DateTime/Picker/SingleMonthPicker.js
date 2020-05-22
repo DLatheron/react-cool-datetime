@@ -5,6 +5,8 @@ import { DateHelper } from '../Helpers/DateHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 
+import './SingleMonthPicker.scss';
+
 // This is effectively a plug-in that given a date calculates
 // all of the date it needs, caches it and renders the date
 // picker.
@@ -12,13 +14,14 @@ import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 export default function SingleMonthPicker(renderProps) {
     const {
         date,
+        props,
         methods,
         state
     } = renderProps;
 
     const months = useMemo(() =>
         DateHelper.getMonthWeekDetails(date.month, date.year)
-    , [date]);
+    , [props.datePicker, date]);
 
     return (
         <div className='body single-month-picker'>

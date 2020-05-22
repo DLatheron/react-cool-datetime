@@ -1,0 +1,231 @@
+$day-of-month-dimension: 44px;
+$button-hover-color: gray;
+$day-hover-color: lightgray;
+
+$today-outline-color: red;
+
+$text-color: black;
+$background-color: white;
+$border-color: black;
+
+$day-of-month-selection-color: white;
+$day-of-month-selection-background-color: #00adef;
+
+.datetime {
+    >.picker-container {
+        >.picker {
+            min-width: calc(100% - 2px);
+
+            >.body {
+                &.double-month-picker {
+                    display: grid;
+                    padding: 0;
+                    margin: 0;
+                    grid-template-columns: auto 4px auto;
+                    grid-template-rows: repeat(2, auto);
+                    grid-template-areas:
+                        'month-0 gap month-1'
+                        'dom-grid-0 gap dom-grid-1'
+                        'today-button today-button today-button';
+
+                    .gap {
+                        grid-area: gap;
+                        width: 100%;
+                        height: 100%;
+                        background: repeating-linear-gradient(
+                            45deg,
+                            white,
+                            white 1%,
+                            gray 1%,
+                            gray 3%
+                          );
+                    }
+
+                    >.month-section {
+                        display: contents;
+
+                        >.month {
+                            button {
+                                cursor: pointer;
+
+                                &:hover {
+                                    color: $button-hover-color;
+                                }
+                            }
+
+                            .month-button {
+                                font-size: 18px;
+                                height: 100%;
+                                border-bottom: 1px solid $border-color;
+                            }
+
+                            >.prev-month-button {
+                                grid-area: prev-month-button;
+                                margin: auto;
+                            }
+
+                            >.month-name {
+                                grid-area: month;
+                                text-align: center;
+                                vertical-align: middle;
+                                font-size: 18px;
+                                font-weight: 600;
+                                padding: 6px 0;
+                                border-bottom: 1px solid $border-color;
+                            }
+
+                            >.next-month-button {
+                                grid-area: next-month-button;
+                                margin: auto;
+                            }
+
+                            &:first-child {
+                                grid-area: month-0;
+
+                                display: grid;
+                                grid-template-columns: auto 1fr;
+                                grid-template-areas: 'prev-month-button month';
+
+                                border-right: 1px solid $border-color;
+                            }
+
+                            &:last-child {
+                                grid-area: month-1;
+
+                                display: grid;
+                                grid-template-columns: 1fr auto;
+                                grid-template-areas: 'month next-month-button';
+
+
+                                border-left: 1px solid $border-color;
+                            }
+                        }
+                    }
+
+                    >.day-of-month-section {
+                        &.day-of-month-0 {
+                            grid-area: dom-grid-0;
+                            border-right: 1px solid black;
+                        }
+
+                        &.day-of-month-1 {
+                            grid-area: dom-grid-1;
+                            border-left: 1px solid black;
+                        }
+
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        grid-template-rows: repeat(6, auto);
+                        grid-template-areas:
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
+                            'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month';
+
+                        align-items: center;
+                        align-self: center;
+                        font-size: 14px;
+
+                        >.header {
+                            display: contents;
+                            grid-row: 0;
+
+                            >.day-of-week {
+                                text-align: center;
+                                vertical-align: middle;;
+                                padding: 10px 0;
+                                font-weight: 600;
+                            }
+
+                            >.day-of-week {
+                                border-left: 1px solid $border-color;
+
+                                &:first-child{
+                                    border-left: none;
+                                }
+                            }
+                        }
+
+                        >.week {
+                            display: contents;
+
+                            >.day-of-month  {
+                                font-size: 12px;
+                                text-align: center;
+                                vertical-align: middle;;
+                                padding: 0;
+
+                                width: $day-of-month-dimension;
+                                height: $day-of-month-dimension;
+                                line-height: $day-of-month-dimension;
+
+                                :not(.blank-day) {
+                                    cursor: pointer;
+                                }
+
+                                &:hover:not(.blank-day) {
+                                    color: $text-color;
+                                    background-color: $day-hover-color;
+                                }
+
+                                &.today {
+                                    position: relative;
+
+                                    &::after {
+                                        position: absolute;
+                                        content: ' ';
+                                        top: 2px;
+                                        bottom: 2px;
+                                        left: 2px;
+                                        right: 2px;
+                                        border: 2px solid $today-outline-color;
+                                        border-top-right-radius: 50%;
+                                        border-top-left-radius: 50%;
+                                        border-bottom-right-radius: 50%;
+                                        border-bottom-left-radius: 50%;
+                                    }
+                                }
+                            }
+
+                            >.day-of-month {
+                                border-top: 1px solid $border-color;
+                                border-left: 1px solid $border-color;
+
+                                &:first-child{
+                                    border-left: none;
+                                }
+                            }
+
+                            >.curr-month {
+                                &.curr-date {
+                                    color: $day-of-month-selection-color;
+                                    background-color: $day-of-month-selection-background-color;
+                                }
+                            }
+
+                            >.next-month,
+                            >.prev-month {
+                                color: $day-hover-color;
+                            }
+                        }
+                    }
+
+                    >.today-button {
+                        grid-area: today-button;
+                        font-size: 12px;
+                        padding: 10px 0;
+                        cursor: pointer;
+                        border-top: 1px solid $border-color;
+
+                        &:hover {
+                            color: $button-hover-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

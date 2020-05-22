@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 import range from 'lodash/range';
 
+import './DoubleMonthPicker.scss';
+
 // This is effectively a plug-in that given a date calculates
 // all of the date it needs, caches it and renders the date
 // picker.
@@ -13,46 +15,51 @@ import range from 'lodash/range';
 export default function DoubleMonthPicker(renderProps) {
     const {
         date,
+        props,
         methods,
         state
     } = renderProps;
 
     const months = useMemo(() =>
         DateHelper.getMonthWeekDetails(date.month, date.year, 2)
-    , [date]);
+    , [props.datePicker, date]);
 
     return (
         <div className='body double-month-picker'>
             <div className='month-section'>
-                <button
-                    className='month-button prev-month-button'
-                    onClick={() => methods.setPickerDate(DateHelper.prevMonth(date))}
-                >
-                    <FontAwesomeIcon icon={faCaretLeft} />
-                </button>
                 {
-                    months.map(({ monthName, year }, index) =>
-                        <span key={index}
-                            className={
-                                classNames(
-                                    'month',
-                                    `month-${index}`
-                                )
-                            }
-                        >
-                            {monthName} {year}
-                        </span>
-                    )
-                }
-                <div className='gap' />
-                <button
-                    className='month-button next-month-button'
-                    onClick={() => methods.setPickerDate(DateHelper.nextMonth(date))}
-                >
-                    <FontAwesomeIcon icon={faCaretRight} />
-                </button>
-            </div>
+                    months.map(({ monthName, year }, index) => {
+                        return (
+                            <div
+                                key={index}
+                                className='month'
+                            >
+                                { index === 0 &&
+                                    <button
+                                        className='month-button prev-month-button'
+                                        onClick={() => methods.setPickerDate(DateHelper.prevMonth(date))}
+                                    >
+                                        <FontAwesomeIcon icon={faCaretLeft} />
+                                    </button>
+                                }
 
+                                <span className='month-name'>{monthName} {year}</span>
+
+                                {
+                                    index === 1 &&
+                                        <button
+                                            className='month-button next-month-button'
+                                            onClick={() => methods.setPickerDate(DateHelper.nextMonth(date))}
+                                        >
+                                            <FontAwesomeIcon icon={faCaretRight} />
+                                        </button>
+                                }
+                            </div>
+                        );
+                    })
+                }
+            </div>
+            <div className='gap' />
             {
                 months.map(({ monthName, year, weeks }, index) =>
                     <div
@@ -125,12 +132,12 @@ export default function DoubleMonthPicker(renderProps) {
                     </div>
                 )
             }
-            {/* <button
+            <button
                 className='today-button'
                 onClick={() => methods.setSelectedDate(DateHelper.today())}
             >
                 Today
-            </button> */}
+            </button>
         </div>
     );
 }

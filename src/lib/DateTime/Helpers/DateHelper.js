@@ -122,6 +122,12 @@ export const DateHelper = {
 
     isValid: date => DateHelper.myDateToMoment(date).isValid(),
 
+    getDayOfWeek: date => {
+        const moment = DateHelper.myDateToMoment(date);
+
+        return moment.day();
+    },
+
     startOfMonth: date => {
         const moment = DateHelper.myDateToMoment(date).startOf('month');
 
@@ -302,8 +308,6 @@ export const DateHelper = {
                     ++date.year;
                     date.month = 1;
                 }
-
-                console.info('date', date);
             }
 
             const startOfMonth = DateHelper.startOfMonth(date);
@@ -329,5 +333,95 @@ export const DateHelper = {
                 weeks
             };
         });
+    },
+
+    getMonthDayDetails: (month, year, numMonths = 1) => {
+        const date = {
+            dayOfMonth: 1,
+            month,
+            year
+        };
+
+        const months = range(0, numMonths).map(monthOffset => {
+            if (monthOffset > 0) {
+                ++date.month;
+                if (date.month > 12) {
+                    ++date.year;
+                    date.month = 1;
+                }
+            }
+
+            const startOfMonth = DateHelper.startOfMonth(date);
+            const startOfWeek = DateHelper.startOfMonthWeek(startOfMonth);
+            const endOfMonth = DateHelper.endOfMonth(startOfMonth);
+            const numWeeksToDisplayMonth = DateHelper.weeksToDisplayMonth(startOfWeek, endOfMonth);
+
+            const weeks = range(0, numWeeksToDisplayMonth).map(week => {
+                const days = DateHelper.getWeek({
+                    startOfWeek,
+                    week,
+                    startOfMonth,
+                    endOfMonth
+                });
+
+                return {
+                    index: week,
+                    days
+                };
+            });
+
+            const firstDayInMonth = weeks[0].days.find(day => day.monthOffset === 0);
+
+            return {
+                year: date.year,
+                month: date.month,
+                monthName: DateHelper.getLongMonth(date),
+                days: [].concat(...weeks.map(week => week.days)),
+                firstDayInMonth: DateHelper.getDayOfWeek(firstDayInMonth.date)
+            };
+        });
+
+        const monthWithLowestStartDoW = months.reduce((acc, { firstDayInMonth }) => {
+            if (acc.firstDayInMonth === undefined || firstDayInMonth < acc.firstDayInMonth) {
+                return {
+                    month,
+                    firstDayInMonth
+                }
+            }
+
+            return acc;
+        }, {});
+
+        const monthThatNeedsMostDays = months.reduce((acc, { month, year, firstDayInMonth }) => {
+            const date = {
+                dayOfMonth: 1,
+                month,
+                year
+            };
+            const daysInMonth = DateHelper.daysInMonth(date);
+            const latestDay = firstDayInMonth + daysInMonth;
+
+            if (acc.latestDay === undefined || latestDay > acc.latestDay) {
+                return {
+                    month,
+                    latestDay
+                }
+            }
+
+            return acc;
+        }, {});
+
+        console.info('monthThatNeedsMostDays', monthThatNeedsMostDays);
+
+
+        months.forEach(month => {
+            month.days = month.days.slice(0, monthThatNeedsMostDays.latestDay);
+        });
+
+        return {
+            months,
+            skipStartDays: monthWithLowestStartDoW.firstDayInMonth,
+            worstCaseNumDays: monthThatNeedsMostDays.latestDay
+        };
     }
 };

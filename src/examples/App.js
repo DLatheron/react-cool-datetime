@@ -3,6 +3,7 @@ import { DateTime } from '../lib';
 import styled from 'styled-components';
 import _ from 'lodash';
 
+import SingleMonthPicker from '../lib/DateTime/Picker/SingleMonthPicker';
 import DoubleMonthPicker from '../lib/DateTime/Picker/DoubleMonthPicker';
 import TwelveMonthPicker from '../lib/DateTime/Picker/TwelveMonthPicker';
 
@@ -47,6 +48,14 @@ const Checkbox = styled.div`
     input {
         margin-right: 10px;
     }
+
+    label {
+        vertical-align: middle;
+    }
+`;
+
+const Select = styled.select`
+    margin: 5px 0;
 
     label {
         vertical-align: middle;
@@ -108,17 +117,33 @@ function App() {
     const [suffix, setSuffix] = useState(false);
     const [handle, setHandle] = useState(false);
     const [disabled, setDisabled] = useState(false);
-    const [dualMonth, setDualMonth] = useState(false);
-    const [twelveMonth, setTwelveMonth] = useState(true);
+    const [pickerType, setPickerType] = useState('SingleMonthPicker');
 
     const overrides = {
         clear: clear ? () => <FontAwesomeIcon icon={faTimes} /> : null,
         prefix: prefix ? () => <FontAwesomeIcon icon={faCaretRight} /> : undefined,
         suffix: suffix ? () => <FontAwesomeIcon icon={faCaretLeft} /> : undefined,
         handle: handle ? ({ state: { open } }) => <FontAwesomeIcon icon={open ? faCaretRight : faCaretLeft} /> : undefined,
-        disabled,
-        datePicker: dualMonth ? DoubleMonthPicker : twelveMonth ? TwelveMonthPicker : undefined
+        disabled
     };
+
+    switch (pickerType) {
+        case 'SingleMonthPicker':
+            overrides.datePicker = SingleMonthPicker;
+            break;
+
+        case 'DoubleMonthPicker':
+            overrides.datePicker = DoubleMonthPicker;
+            break;
+
+        case 'TwelveMonthPicker':
+            overrides.datePicker = TwelveMonthPicker;
+            break;
+
+        default:
+            overrides.datePicker = SingleMonthPicker;
+            break;
+    }
 
     return (
         <Examples className='app'>
@@ -139,9 +164,7 @@ function App() {
                     { id: 'prefix', value: prefix, type: 'checkbox', setValue: setPrefix, text: 'Prefix' },
                     { id: 'suffix', value: suffix, type: 'checkbox', setValue: setSuffix, text: 'Suffix' },
                     { id: 'handle', value: handle, type: 'checkbox', setValue: setHandle, text: 'Handle' },
-                    { id: 'disabled', value: disabled, type: 'checkbox', setValue: setDisabled, text: 'Disabled' },
-                    { id: 'dualMonth', value: dualMonth, type: 'checkbox', setValue: setDualMonth, text: 'Two Months at a time' },
-                    { id: 'twelveMonth', value: twelveMonth, type: 'checkbox', setValue: setTwelveMonth, text: 'Twelve Months at a time' }
+                    { id: 'disabled', value: disabled, type: 'checkbox', setValue: setDisabled, text: 'Disabled' }
                 ]
                     .map(({ id, value, type, setValue, min, max, text }) => {
                         return (
@@ -168,6 +191,19 @@ function App() {
                         );
                     })
             }
+            <label for='picker-type'>Choose a picker type: </label>
+            <Select
+                name='type'
+                id='picker-type'
+                onChange={e => {
+                    setPickerType(e.target.value);
+                }}
+            >
+                <option value='SingleMonthPicker'>1 Month Picker</option>
+                <option value='DoubleMonthPicker'>2 Month Picker</option>
+                <option value='TwelveMonthPicker'>12 Month Picker</option>
+            </Select>
+
             </Controls>
         </Examples>
     );
