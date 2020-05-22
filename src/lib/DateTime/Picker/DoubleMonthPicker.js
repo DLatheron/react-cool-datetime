@@ -15,14 +15,13 @@ import './DoubleMonthPicker.scss';
 export default function DoubleMonthPicker(renderProps) {
     const {
         date,
-        props,
         methods,
         state
     } = renderProps;
 
     const months = useMemo(() =>
         DateHelper.getMonthWeekDetails(date.month, date.year, 2)
-    , [props.datePicker, date]);
+    , [date]);
 
     return (
         <div className='body double-month-picker'>

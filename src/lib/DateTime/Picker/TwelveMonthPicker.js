@@ -15,7 +15,6 @@ import './TwelveMonthPicker.scss';
 export default function TwelveMonthPicker(renderProps) {
     const {
         date,
-        props,
         methods,
         state
     } = renderProps;
@@ -24,7 +23,7 @@ export default function TwelveMonthPicker(renderProps) {
         const months = DateHelper.getMonthDayDetails(1, date.year, 12)
 
         return months;
-    }, [props.datePicker, date]);
+    }, [date]);
 
     const {
         skipStartDays,
@@ -62,6 +61,7 @@ export default function TwelveMonthPicker(renderProps) {
                                 case 4: return <div className='header-day-of-week'>T</div>;
                                 case 5: return <div className='header-day-of-week'>F</div>;
                                 case 6: return <div className='header-day-of-week'>S</div>;
+                                default: throw new Error(`Unexpected day: ${day}`);
                             }
                         })
                     }

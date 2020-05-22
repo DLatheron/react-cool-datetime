@@ -192,6 +192,21 @@ $day-of-month-selection-background-color: #00adef;
                                     color: $day-of-month-selection-color;
                                     background-color: $day-of-month-selection-background-color;
                                 }
+
+                                &.selection-start-date {
+                                    color: $day-of-month-selection-color;
+                                    background-color: green;
+                                }
+
+                                &.selection-end-date {
+                                    color: $day-of-month-selection-color;
+                                    background-color: red;
+                                }
+
+                                &.selection-in-range {
+                                    color: $day-of-month-selection-color;
+                                    background-color: yellow;
+                                }
                             }
 
                             >.next-month,

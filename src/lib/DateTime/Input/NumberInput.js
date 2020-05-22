@@ -39,7 +39,7 @@ export default function NumberInput(renderProps) {
 
     const cascadeNewValueToParent = newValue => {
         let intValue = parseInt(newValue);
-        console.info('intValue', intValue, defaultValue);
+
         if (isNaN(intValue)) {
             intValue = defaultValue;
         } else if (intValue > max) {

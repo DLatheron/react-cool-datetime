@@ -17,7 +17,8 @@ function initialState(defaults) {
     return {
         open: defaults.open,
         pickerDate: defaults.pickerDatenull,
-        selectedDate: defaults.selectedDate
+        selectedDate: defaults.selectedDate,
+        selectedEndDate: undefined
     };
 }
 
@@ -53,6 +54,12 @@ function reducer(state, action) {
                 selectedDate: null
             };
 
+        case 'clearSelectedEndDate':
+            return {
+                ...state,
+                selectedEndDate: null
+            };
+
         case 'setPickerDate':
             return {
                 ...state,
@@ -64,6 +71,12 @@ function reducer(state, action) {
                 ...state,
                 selectedDate: action.selectedDate,
                 pickerDate: action.selectedDate
+            };
+
+        case 'setSelectedEndDate':
+            return {
+                ...state,
+                selectedEndDate: action.selectedDate
             };
 
         default:
@@ -148,7 +161,35 @@ export default function DateTime(props) {
         setSelectedDate: selectedDate => {
             // Only ever update the date if it is valid!
             if (DateHelper.isValid(selectedDate)) {
-                dispatch({ type: 'setSelectedDate', selectedDate });
+                switch (props.selectionType) {
+                    case 'single':
+                        dispatch({ type: 'setSelectedDate', selectedDate });
+                        break;
+
+                    case 'range':
+                        if (!state.selectedDate) {
+                            console.info('Set start of range');
+                            dispatch({ type: 'setSelectedDate', selectedDate });
+                        } else if (!state.selectedEndDate) {
+                            console.info('Set end of range');
+                            dispatch({ type: 'setSelectedEndDate', selectedDate });
+                        } else {
+                            // ????
+                            console.info('Set start of range and cllear end of range');
+                            dispatch({ type: 'setSelectedDate', selectedDate });
+                            dispatch({ type: 'clearSelectedEndDate' });
+                        }
+                        break;
+
+                    default:
+                        throw new Error(`Unknown selection type: '${props.selectionType}'`);
+                }
+            }
+        },
+        setSelectedEndDate: selectedDate => {
+            // Only ever update the date if it is valid!
+            if (DateHelper.isValid(selectedDate)) {
+                dispatch({ type: 'setSelectedEndDate', selectedDate });
             }
         },
         setPickerDate: pickerDate => {

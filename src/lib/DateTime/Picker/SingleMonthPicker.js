@@ -21,7 +21,7 @@ export default function SingleMonthPicker(renderProps) {
 
     const months = useMemo(() =>
         DateHelper.getMonthWeekDetails(date.month, date.year)
-    , [props.datePicker, date]);
+    , [date]);
 
     return (
         <div className='body single-month-picker'>
@@ -83,7 +83,10 @@ export default function SingleMonthPicker(renderProps) {
                                             monthOffset === -1 && 'prev-month',
                                             monthOffset === 0 && 'curr-month',
                                             monthOffset === 1 && 'next-month',
-                                            state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'curr-date',
+                                            props.selectionType === 'single' && state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'curr-date',
+                                            props.selectionType === 'range' && state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'selection-start-date',
+                                            props.selectionType === 'range' && state.selectedEndDate && DateHelper.equals(state.selectedEndDate, date) && 'selection-end-date',
+                                            props.selectionType === 'range' &&  state.selectedDate && state.selectedEndDate && DateHelper.inRangeExclusive(date, state.selectedDate, state.selectedEndDate) && 'selection-in-range',
                                             today && 'today'
                                         )}
                                         aria-label={label}

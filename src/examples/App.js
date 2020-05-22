@@ -54,8 +54,8 @@ const Checkbox = styled.div`
     }
 `;
 
-const Select = styled.select`
-    margin: 5px 0;
+const Select = styled.div`
+    margin: 10px 0;
 
     label {
         vertical-align: middle;
@@ -118,13 +118,15 @@ function App() {
     const [handle, setHandle] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [pickerType, setPickerType] = useState('SingleMonthPicker');
+    const [selectionType, setSelectionType] = useState('range');
 
     const overrides = {
         clear: clear ? () => <FontAwesomeIcon icon={faTimes} /> : null,
         prefix: prefix ? () => <FontAwesomeIcon icon={faCaretRight} /> : undefined,
         suffix: suffix ? () => <FontAwesomeIcon icon={faCaretLeft} /> : undefined,
         handle: handle ? ({ state: { open } }) => <FontAwesomeIcon icon={open ? faCaretRight : faCaretLeft} /> : undefined,
-        disabled
+        disabled,
+        selectionType
     };
 
     switch (pickerType) {
@@ -158,52 +160,73 @@ function App() {
             </Example>
 
             <Controls>
-            {
-                [
-                    { id: 'clear', value: clear, type: 'checkbox', setValue: setClear, text: 'Clear Button' },
-                    { id: 'prefix', value: prefix, type: 'checkbox', setValue: setPrefix, text: 'Prefix' },
-                    { id: 'suffix', value: suffix, type: 'checkbox', setValue: setSuffix, text: 'Suffix' },
-                    { id: 'handle', value: handle, type: 'checkbox', setValue: setHandle, text: 'Handle' },
-                    { id: 'disabled', value: disabled, type: 'checkbox', setValue: setDisabled, text: 'Disabled' }
-                ]
-                    .map(({ id, value, type, setValue, min, max, text }) => {
-                        return (
-                            <Checkbox key={id}>
-                                <input
-                                    id={id}
-                                    type={type}
-                                    value={value}
-                                    min={min}
-                                    max={max}
-                                    checked={type === 'checkbox' ? value : undefined}
-                                    onChange={e => {
-                                        if (type === 'checkbox') {
-                                            setValue(!value);
-                                        } else if (type === 'number') {
-                                            setValue(parseInt(e.target.value));
-                                        } else {
-                                            throw new Error('Unsupported type');
+                {
+                    [
+                        { id: 'clear', value: clear, type: 'checkbox', setValue: setClear, text: 'Clear Button' },
+                        { id: 'prefix', value: prefix, type: 'checkbox', setValue: setPrefix, text: 'Prefix' },
+                        { id: 'suffix', value: suffix, type: 'checkbox', setValue: setSuffix, text: 'Suffix' },
+                        { id: 'handle', value: handle, type: 'checkbox', setValue: setHandle, text: 'Handle' },
+                        { id: 'disabled', value: disabled, type: 'checkbox', setValue: setDisabled, text: 'Disabled' }
+                    ]
+                        .map(({ id, value, type, setValue, min, max, text }) => {
+                            return (
+                                <Checkbox key={id}>
+                                    <input
+                                        id={id}
+                                        type={type}
+                                        value={value}
+                                        min={min}
+                                        max={max}
+                                        checked={type === 'checkbox' ? value : undefined}
+                                        onChange={e => {
+                                            if (type === 'checkbox') {
+                                                setValue(!value);
+                                            } else if (type === 'number') {
+                                                setValue(parseInt(e.target.value));
+                                            } else {
+                                                throw new Error('Unsupported type');
+                                            }
+                                        }}
+                                    />
+                                    <label htmlFor={id}>{text}</label>
+                                </Checkbox>
+                            );
+                        })
+                }
+                {
+                    [
+                        {
+                            id: 'picker-type', value: pickerType, setValue: setPickerType, text: 'Picker type', options: [
+                                { value: 'SingleMonthPicker', text: '1 Month Picker' },
+                                { value: 'DoubleMonthPicker', text: '2 Month Picker' },
+                                { value: 'TwelveMonthPicker', text: '12 Month Picker' }
+                            ]
+                        }, {
+                            id: 'selection-type', value: selectionType, setValue: setSelectionType, text: 'Selection type', options: [
+                                { value: 'single', text: 'Single' },
+                                { value: 'range', text: 'Range' }
+                            ]
+                        }
+                    ]
+                        .map(({ id, value, setValue, text, options }) => {
+                            return (
+                                <Select key={id}>
+                                    <label htmlFor={id}>{text}: </label>
+                                    <select
+                                        id={id}
+                                        value={value}
+                                        onChange={e => {
+                                            setValue(e.target.value);
+                                        }}
+                                    >
+                                        {
+                                            options.map(({ value, text }) => <option key={value} value={value}>{text}</option>)
                                         }
-                                    }}
-                                />
-                                <label htmlFor={id}>{text}</label>
-                            </Checkbox>
-                        );
-                    })
-            }
-            <label for='picker-type'>Choose a picker type: </label>
-            <Select
-                name='type'
-                id='picker-type'
-                onChange={e => {
-                    setPickerType(e.target.value);
-                }}
-            >
-                <option value='SingleMonthPicker'>1 Month Picker</option>
-                <option value='DoubleMonthPicker'>2 Month Picker</option>
-                <option value='TwelveMonthPicker'>12 Month Picker</option>
-            </Select>
-
+                                    </select>
+                                </Select>
+                            );
+                        })
+                }
             </Controls>
         </Examples>
     );

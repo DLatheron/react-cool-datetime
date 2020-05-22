@@ -69,8 +69,6 @@ export const DateHelper = {
         const tokenRegExp = /{(.*?)}/g;
         const matches = [...format.matchAll(tokenRegExp)];
 
-        console.info(matches);
-
         const types = [];
 
         for (let i = 0; i < matches.length; ++i) {
@@ -83,8 +81,6 @@ export const DateHelper = {
             const end = (start + length);
             const separator = (i < matches.length - 1) && format.substr(end, matches[i + 1].index - end);
 
-            console.info('match', i, token, length, type, start, end, separator);
-
             types.push({
                 ...formatTypes[type],
                 defaultValue: DateHelper.today()[formatTypes[type].property],
@@ -92,8 +88,6 @@ export const DateHelper = {
                 separator: (separator.length === 1) ? separator : undefined
             });
         }
-
-        console.info(types);
 
         return types;
     },
@@ -202,6 +196,14 @@ export const DateHelper = {
         );
     },
 
+    inRangeExclusive: (date, start, end) => {
+        const dateMoment = DateHelper.myDateToMoment(date);
+        const startMoment = DateHelper.myDateToMoment(start);
+        const endMoment = DateHelper.myDateToMoment(end);
+
+        return dateMoment.isAfter(startMoment) && dateMoment.isBefore(endMoment);
+    },
+
     getWeek: ({ startOfWeek, week, startOfMonth, endOfMonth }) => {
         const startOfMonthMoment = DateHelper.myDateToMoment(startOfMonth);
         const endOfMonthMoment = DateHelper.myDateToMoment(endOfMonth);
@@ -242,6 +244,10 @@ export const DateHelper = {
     today: () => DateHelper.momentToMyDate(moment()),
 
     daysInMonth: date => {
+        if (!date) {
+            return 31;
+        }
+
         const isLeapYear = date.year === undefined || DateHelper.myDateToMoment({
             ...date,
             dayOfMonth: 1
@@ -410,9 +416,6 @@ export const DateHelper = {
 
             return acc;
         }, {});
-
-        console.info('monthThatNeedsMostDays', monthThatNeedsMostDays);
-
 
         months.forEach(month => {
             month.days = month.days.slice(0, monthThatNeedsMostDays.latestDay);
