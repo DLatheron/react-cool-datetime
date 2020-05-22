@@ -18,7 +18,11 @@ function initialState(defaults) {
         open: defaults.open,
         pickerDate: defaults.pickerDatenull,
         selectedDate: defaults.selectedDate,
-        selectedEndDate: undefined
+        selectedEndDate: undefined,
+        selectionHover: {
+            start: null,
+            end: null
+        }
     };
 }
 
@@ -77,6 +81,12 @@ function reducer(state, action) {
             return {
                 ...state,
                 selectedEndDate: action.selectedDate
+            };
+
+        case 'setSelectionHover':
+            return {
+                ...state,
+                selectionHover: action.selectionHover
             };
 
         default:
@@ -170,6 +180,7 @@ export default function DateTime(props) {
                         if (!state.selectedDate) {
                             console.info('Set start of range');
                             dispatch({ type: 'setSelectedDate', selectedDate });
+                            dispatch({ type: 'setSelectionHover', selectionHover: { start: selectedDate, end: null } });
                         } else if (!state.selectedEndDate) {
                             console.info('Set end of range');
 
@@ -179,11 +190,14 @@ export default function DateTime(props) {
                             } else {
                                 dispatch({ type: 'setSelectedEndDate', selectedDate });
                             }
+
+                            dispatch({ type: 'setSelectionHover', selectionHover: { start: null, end: null } });
                         } else {
                             // ????
                             console.info('Set start of range and cllear end of range');
                             dispatch({ type: 'setSelectedDate', selectedDate });
                             dispatch({ type: 'clearSelectedEndDate' });
+                            dispatch({ type: 'setSelectionHover', selectionHover: { start: selectedDate, end: null } });
                         }
                         break;
 
@@ -197,6 +211,9 @@ export default function DateTime(props) {
             if (DateHelper.isValid(selectedDate)) {
                 dispatch({ type: 'setSelectedEndDate', selectedDate });
             }
+        },
+        setSelectionHover: (startDate, endDate) => {
+            dispatch({ type: 'setSelectionHover', selectionHover: { start: startDate, end: endDate } });
         },
         setPickerDate: pickerDate => {
             // Only ever update the date if it is valid!

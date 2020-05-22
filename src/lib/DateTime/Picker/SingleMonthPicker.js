@@ -83,18 +83,37 @@ export default function SingleMonthPicker(renderProps) {
                                             classes.push('curr-date');
                                         }
                                     } else if (props.selectionType === 'range') {
-                                        if (state.selectedDate &&
-                                            DateHelper.equals(state.selectedDate, date)) {
-                                            classes.push('selection-start-date');
-                                        }
-                                        if (state.selectedEndDate &&
-                                            DateHelper.equals(state.selectedEndDate, date)) {
-                                            classes.push('selection-end-date');
-                                        }
-                                        if (state.selectedDate &&
-                                            state.selectedEndDate &&
-                                            DateHelper.inRangeExclusive(date, state.selectedDate, state.selectedEndDate)) {
-                                            classes.push('selection-in-range');
+                                        if (state.selectionHover.start && state.selectionHover.end) {
+                                            const hoverStart = DateHelper.isBefore(state.selectionHover.start, state.selectionHover.end)
+                                                ? state.selectionHover.start
+                                                : state.selectionHover.end;
+                                            const hoverEnd = DateHelper.isBefore(state.selectionHover.start, state.selectionHover.end)
+                                                ? state.selectionHover.end
+                                                : state.selectionHover.start;
+
+                                            if (DateHelper.equals(hoverStart, date)) {
+                                                classes.push('selection-start-date-hover');
+                                            }
+                                            if (DateHelper.equals(hoverEnd, date)) {
+                                                classes.push('selection-end-date-hover');
+                                            }
+                                            if (DateHelper.inRangeExclusive(date, hoverStart, hoverEnd)) {
+                                                classes.push('selection-in-range-hover');
+                                            }
+                                        } else {
+                                            if (state.selectedDate &&
+                                                DateHelper.equals(state.selectedDate, date)) {
+                                                classes.push('selection-start-date');
+                                            }
+                                            if (state.selectedEndDate &&
+                                                DateHelper.equals(state.selectedEndDate, date)) {
+                                                classes.push('selection-end-date');
+                                            }
+                                            if (state.selectedDate &&
+                                                state.selectedEndDate &&
+                                                DateHelper.inRangeExclusive(date, state.selectedDate, state.selectedEndDate)) {
+                                                classes.push('selection-in-range');
+                                            }
                                         }
                                     }
 
@@ -111,6 +130,12 @@ export default function SingleMonthPicker(renderProps) {
                                             )}
                                             aria-label={label}
                                             onClick={() => methods.setSelectedDate(date)}
+                                            onMouseEnter={() => {
+                                                if (state.selectionHover.start) {
+                                                    console.info('Hovering', date);
+                                                    methods.setSelectionHover(state.selectionHover.start, date);
+                                                }
+                                            }}
                                         >
                                             {day}
                                             {

@@ -185,6 +185,28 @@ $day-of-month-selection-background-color: #00adef;
                                     left: 0;
                                     right: 0;
 
+
+                                    &.selection-start-date-hover {
+                                        color: $day-of-month-selection-color;
+                                        background-color: green;
+
+                                        border-top-left-radius: 50%;
+                                        border-bottom-left-radius: 50%;
+                                    }
+
+                                    &.selection-end-date-hover {
+                                        color: $day-of-month-selection-color;
+                                        background-color: green;
+
+                                        border-top-right-radius: 50%;
+                                        border-bottom-right-radius: 50%;
+                                    }
+
+                                    &.selection-in-range-hover {
+                                        color: $day-of-month-selection-color;
+                                        background-color: green;
+                                    }
+
                                     &.selection-start-date {
                                         color: $day-of-month-selection-color;
                                         background-color: $day-of-month-selection-background-color;
