@@ -79,8 +79,9 @@ export default function SingleMonthPicker(renderProps) {
 
                                     if (props.selectionType === 'single') {
                                         if (state.selectedDate &&
-                                            DateHelper.equals(state.selectedDate, date)) {
-                                            classes.push('curr-date');
+                                            DateHelper.equals(state.selectedDate.start, date)) {
+                                                console.info('hi');
+                                                classes.push('curr-date');
                                         }
                                     } else if (props.selectionType === 'range') {
                                         if (state.selectionHover.start && state.selectionHover.end) {
@@ -101,18 +102,18 @@ export default function SingleMonthPicker(renderProps) {
                                                 classes.push('selection-in-range-hover');
                                             }
                                         } else {
-                                            if (state.selectedDate &&
-                                                DateHelper.equals(state.selectedDate, date)) {
-                                                classes.push('selection-start-date');
-                                            }
-                                            if (state.selectedEndDate &&
-                                                DateHelper.equals(state.selectedEndDate, date)) {
-                                                classes.push('selection-end-date');
-                                            }
-                                            if (state.selectedDate &&
-                                                state.selectedEndDate &&
-                                                DateHelper.inRangeExclusive(date, state.selectedDate, state.selectedEndDate)) {
-                                                classes.push('selection-in-range');
+                                            if (state.selectedDate) {
+                                                if (DateHelper.equals(state.selectedDate.start, date)) {
+                                                    classes.push('selection-start-date');
+                                                }
+                                                if (DateHelper.equals(state.selectedDate.end, date)) {
+                                                    classes.push('selection-end-date');
+                                                }
+                                                if (state.selectedDate.start &&
+                                                    state.selectedDate.end &&
+                                                    DateHelper.inRangeExclusive(date, state.selectedDate.start, state.selectedDate.end)) {
+                                                    classes.push('selection-in-range');
+                                                }
                                             }
                                         }
                                     }

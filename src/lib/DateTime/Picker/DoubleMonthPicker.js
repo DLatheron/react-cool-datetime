@@ -95,7 +95,7 @@ export default function DoubleMonthPicker(renderProps) {
                                                     monthOffset === -1 && 'prev-month',
                                                     monthOffset === 0 && 'curr-month',
                                                     monthOffset === 1 && 'next-month',
-                                                    state.selectedDate && DateHelper.equals(state.selectedDate, date) && 'curr-date',
+                                                    state.selectedDate.start && DateHelper.equals(state.selectedDate.start, date) && 'curr-date',
                                                     today && 'today'
                                                 )}
                                                 aria-label={label}

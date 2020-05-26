@@ -18,11 +18,11 @@ export default function Input(renderProps) {
         year: useRef()
     };
 
-    const [localCopyOfDate, setLocalCopyOfDate] = useState(state.selectedDate);
+    const [localCopyOfDate, setLocalCopyOfDate] = useState(state.selectedDate.start);
 
     useEffect(() => {
-        setLocalCopyOfDate(state.selectedDate);
-    }, [state.selectedDate]);
+        setLocalCopyOfDate(state.selectedDate.start);
+    }, [state.selectedDate.start]);
 
     const updateLocalCopyOfDate = newDate => {
         const daysInMonth = DateHelper.daysInMonth(newDate);

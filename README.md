@@ -26,6 +26,7 @@ So the solution? Well here is the one chosen by this implementation:
 
 
 ## TODO:
+- Selection
 - Full support for undefined dates throughout;
 - Year selection on dropdown (type or select?);
 - Month selection on dropdown (type of select?);

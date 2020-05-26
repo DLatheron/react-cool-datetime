@@ -189,6 +189,10 @@ export const DateHelper = {
     },
 
     equals: (a, b) => {
+        if (!a || !b) {
+            return false;
+        }
+
         return (
             a.dayOfMonth === b.dayOfMonth &&
             a.month === b.month &&

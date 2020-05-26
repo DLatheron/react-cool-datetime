@@ -227,6 +227,11 @@ $day-of-month-selection-background-color: #00adef;
                                         color: $day-of-month-selection-color;
                                         background-color: $day-of-month-selection-background-color;
                                     }
+
+                                    &.curr-date {
+                                        color: $day-of-month-selection-color;
+                                        background-color: $day-of-month-selection-background-color;
+                                    }
                                 }
                             }
 
@@ -236,13 +241,6 @@ $day-of-month-selection-background-color: #00adef;
 
                                 &:first-child{
                                     border-left: none;
-                                }
-                            }
-
-                            >.curr-month {
-                                &.curr-date {
-                                    color: $day-of-month-selection-color;
-                                    background-color: $day-of-month-selection-background-color;
                                 }
                             }
 

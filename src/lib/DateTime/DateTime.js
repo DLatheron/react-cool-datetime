@@ -18,7 +18,6 @@ function initialState(defaults) {
         open: defaults.open,
         pickerDate: defaults.pickerDatenull,
         selectedDate: defaults.selectedDate,
-        selectedEndDate: undefined,
         selectionHover: {
             start: null,
             end: null
@@ -46,24 +45,6 @@ function reducer(state, action) {
                 open: !state.open
             };
 
-        case 'clearPickerDate':
-            return {
-                ...state,
-                pickerDate: null
-            };
-
-        case 'clearSelectedDate':
-            return {
-                ...state,
-                selectedDate: null
-            };
-
-        case 'clearSelectedEndDate':
-            return {
-                ...state,
-                selectedEndDate: null
-            };
-
         case 'setPickerDate':
             return {
                 ...state,
@@ -74,13 +55,7 @@ function reducer(state, action) {
             return {
                 ...state,
                 selectedDate: action.selectedDate,
-                pickerDate: action.selectedDate
-            };
-
-        case 'setSelectedEndDate':
-            return {
-                ...state,
-                selectedEndDate: action.selectedDate
+                pickerDate: action.selectedDate.start
             };
 
         case 'setSelectionHover':
@@ -140,9 +115,16 @@ export default function DateTime(props) {
                 dayOfMonth: 1
             },
             selectedDate: {
-                year: 2020,
-                month: 5,
-                dayOfMonth: 13
+                start: {
+                    year: 2020,
+                    month: 5,
+                    dayOfMonth: 13
+                },
+                end: {
+                    year: 2020,
+                    month: 5,
+                    dayOfMonth: 13
+                }
             }
         })
     );
@@ -163,40 +145,32 @@ export default function DateTime(props) {
             event.nativeEvent.stopImmediatePropagation();
         },
         clearSelectedDate: () => {
-            dispatch({ type: 'clearSelectedDate' });
+            dispatch({ type: 'setSelectedDate', selectedDate: null });
         },
         clearPickerDate: () => {
-            dispatch({ type: 'clearPickerDate' });
+            dispatch({ type: 'setPickerDate', pickerDate: null });
         },
         setSelectedDate: selectedDate => {
             // Only ever update the date if it is valid!
             if (DateHelper.isValid(selectedDate)) {
                 switch (props.selectionType) {
                     case 'single':
-                        dispatch({ type: 'setSelectedDate', selectedDate });
+                        dispatch({ type: 'setSelectedDate', selectedDate: { start: selectedDate, end: selectedDate } });
                         break;
 
                     case 'range':
-                        if (!state.selectedDate) {
-                            console.info('Set start of range');
-                            dispatch({ type: 'setSelectedDate', selectedDate });
+                        if (!state.selectedDate.start) {
+                            dispatch({ type: 'setSelectedDate', selectedDate: {start: selectedDate, end: null } });
                             dispatch({ type: 'setSelectionHover', selectionHover: { start: selectedDate, end: null } });
-                        } else if (!state.selectedEndDate) {
-                            console.info('Set end of range');
-
-                            if (!DateHelper.isBefore(state.selectedDate, selectedDate)) {
-                                dispatch({ type: 'setSelectedEndDate', selectedDate: state.selectedDate });
-                                dispatch({ type: 'setSelectedDate', selectedDate });
+                        } else if (!state.selectedDate.end) {
+                            if (DateHelper.isBefore(state.selectedDate.start, selectedDate)) {
+                                dispatch({ type: 'setSelectedDate', selectedDate: { start: state.selectedDate.start, end: selectedDate } });
                             } else {
-                                dispatch({ type: 'setSelectedEndDate', selectedDate });
+                                dispatch({ type: 'setSelectedDate', selectedDate: { start: selectedDate, end: state.selectedDate.start } });
                             }
-
                             dispatch({ type: 'setSelectionHover', selectionHover: { start: null, end: null } });
                         } else {
-                            // ????
-                            console.info('Set start of range and cllear end of range');
-                            dispatch({ type: 'setSelectedDate', selectedDate });
-                            dispatch({ type: 'clearSelectedEndDate' });
+                            dispatch({ type: 'setSelectedDate', selectedDate: { start: selectedDate, end: null } });
                             dispatch({ type: 'setSelectionHover', selectionHover: { start: selectedDate, end: null } });
                         }
                         break;
@@ -204,12 +178,6 @@ export default function DateTime(props) {
                     default:
                         throw new Error(`Unknown selection type: '${props.selectionType}'`);
                 }
-            }
-        },
-        setSelectedEndDate: selectedDate => {
-            // Only ever update the date if it is valid!
-            if (DateHelper.isValid(selectedDate)) {
-                dispatch({ type: 'setSelectedEndDate', selectedDate });
             }
         },
         setSelectionHover: (startDate, endDate) => {
