@@ -13,30 +13,29 @@ $day-of-month-selection-background-color: #00adef;
 
 .datetime {
     >.picker-container {
+        width: calc(44px * 7);
+
         >.picker {
-            min-width: calc(100% - 2px);
+            background-color: beige !important;
 
             >.body {
                 &.single-month-picker {
+                    box-sizing: content-box;
+
                     display: grid;
                     padding: 0;
                     margin: 0;
-                    grid-template-columns: repeat(7, 1fr);
-                    grid-template-rows: repeat(10, auto);
                     grid-template-areas:
-                        'prev-year-button year year year year year next-year-button'
-                        'prev-month-button month month month month month next-month-button'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month day-of-month'
-                        'today-button today-button today-button today-button today-button today-button today-button';
+                        'year'
+                        'month'
+                        'day-of-month'
+                        'today';
 
                     >.year-section {
-                        display: contents;
+                        grid-area: year;
+                        display: grid;
+                        grid-template-columns: $day-of-month-dimension 1fr $day-of-month-dimension;
+                        grid-template-areas: 'prev-year-button year next-year-button';
 
                         button {
                             cursor: pointer;
@@ -50,7 +49,6 @@ $day-of-month-selection-background-color: #00adef;
                             font-size: 20px;
                             width: 100%;
                             height: 100%;
-                            border-bottom: 1px solid $border-color;
                         }
 
                         >.prev-year-button {
@@ -65,7 +63,6 @@ $day-of-month-selection-background-color: #00adef;
                             font-size: 22px;
                             font-weight: 900;
                             padding: 10px 0;
-                            border-bottom: 1px solid $border-color;
                         }
 
                         >.next-year-button {
@@ -75,7 +72,11 @@ $day-of-month-selection-background-color: #00adef;
                     }
 
                     >.month-section {
-                        display: contents;
+                        grid-area: month;
+                        display: grid;
+                        grid-template-columns: $day-of-month-dimension 1fr $day-of-month-dimension;
+                        grid-template-areas: 'prev-month-button month next-month-button';
+                        border-top: 1px solid $border-color;
 
                         button {
                             cursor: pointer;
@@ -114,7 +115,10 @@ $day-of-month-selection-background-color: #00adef;
                     }
 
                     >.day-of-month-section {
-                        display: contents;
+                        grid-area: day-of-month;
+                        display: grid;
+                        grid-template-columns: repeat(7, auto);
+                        grid-template-rows: repeat(7, auto);
 
                         align-items: center;
                         align-self: center;
@@ -150,6 +154,7 @@ $day-of-month-selection-background-color: #00adef;
                                 padding: 0;
                                 position: relative;
 
+                                width: $day-of-month-dimension;
                                 height: $day-of-month-dimension;
                                 line-height: $day-of-month-dimension;
 
@@ -252,7 +257,7 @@ $day-of-month-selection-background-color: #00adef;
                     }
 
                     >.today-button {
-                        grid-area: today-button;
+                        grid-area: today;
                         font-size: 12px;
                         padding: 10px 0;
                         cursor: pointer;

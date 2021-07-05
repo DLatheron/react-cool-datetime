@@ -122,9 +122,8 @@ $day-of-month-selection-background-color: #00adef;
 
         >.picker {
             position: absolute;
+
             top: 5px;
-            min-width: calc(100% - 2px);
-            overflow: visible;
             left: 0;
             border: 1px solid $border-color;
             background-color: $background-color;
